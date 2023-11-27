@@ -2,7 +2,7 @@
 
 #include <bits/stdc++.h>
 #include <regex>
-#include "headers/State.h"
+#include "State.h"
 using namespace std;
 
 class State;

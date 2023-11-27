@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#include "headers/State.h"
+#include "State.h"
 using namespace std;
 
 class NFA{
@@ -8,6 +8,7 @@ private:
     State* acceptState;
 public:
     NFA(string condition);
+    ~NFA();
     State* getStartState();
     State* getAcceptState();
 };

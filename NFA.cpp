@@ -1,14 +1,20 @@
 #include "headers/NFA.h"
 
 NFA::NFA(string condition){
-    NFA::startState = &State(0, true, false);
-    NFA::startState = &State(1, false, true);
+    startState = new State(0, true, false);
+    acceptState = new State(1, false, true);
+    startState->addTransition(Transition(condition, acceptState));
+}
+
+NFA::~NFA() {
+    delete startState;
+    delete acceptState;
 }
 
 State* NFA::getStartState(){
-    return NFA::startState;
+    return startState;
 }
 
 State* NFA::getAcceptState(){
-    return NFA::acceptState;
+    return acceptState;
 }

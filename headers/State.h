@@ -2,8 +2,10 @@
 
 #include <bits/stdc++.h>
 #include <regex>
-#include "headers/Transition.h"
+#include "Transition.h"
 using namespace std;
+
+class Transition;
 
 class State {
 private:
