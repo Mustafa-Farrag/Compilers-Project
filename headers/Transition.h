@@ -9,10 +9,12 @@ class State;
 
 class Transition {
 private:
+    string conditionStr;
     regex condition;
     State* nextState;
 
 public:
     Transition(string in, State* nState);
+    string getConditionStr();
     State* applyInput(string in);
 };

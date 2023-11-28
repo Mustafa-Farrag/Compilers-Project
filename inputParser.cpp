@@ -22,8 +22,9 @@ void InputParser::parse(string inputFilePath){
     string line;
     
     while (getline(inputFile, line)) {
-        line = regex_replace(line, regex("\\\\(?!L)"), "");
-        
+        line = regex_replace(line, regex("\\\\(?![L+*^])"), "");
+        line = regex_replace(line, regex("\\^"), "\\^");
+
         if(line[0] == '{'){ // Keyword Line
             regex re("[a-zA-Z]+"); // Keywords
             smatch match;

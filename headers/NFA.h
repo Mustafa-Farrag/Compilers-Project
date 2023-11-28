@@ -6,6 +6,7 @@ class NFA{
 private:
     State* startState;
     State* acceptState;
+    
 public:
     NFA(string condition);
     ~NFA();

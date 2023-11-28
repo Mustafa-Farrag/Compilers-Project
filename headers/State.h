@@ -13,6 +13,7 @@ private:
     bool isStart;
     bool isAccept;
     vector<Transition> transitions;
+    vector<Transition> epsilonTransitions;
 
 public:
     State(int n);
@@ -20,6 +21,8 @@ public:
     bool getIsStart();
     bool getIsAccept();
     vector<Transition> getTransitions();
+    vector<Transition> getEpsilonTransitions();
+    vector<State*> getEpsilonStates();
     void addTransition(Transition trans);
     vector<State*> applyInput(string in);
 };
