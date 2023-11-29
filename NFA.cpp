@@ -1,12 +1,12 @@
 #include "headers/NFA.h"
 
-NFA::NFA(string condition){
-    startState = new State(0, true, false);
-    acceptState = new State(1, false, true);
+NFA::NFA(string condition, int counter){
+    startState = new State(counter, true, false);
+    acceptState = new State(counter+1, false, true);
     startState->addTransition(Transition(condition, acceptState));
 }
 
-NFA::~NFA() {
+NFA::~NFA(){
     delete startState;
     delete acceptState;
 }

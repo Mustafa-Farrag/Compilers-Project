@@ -8,7 +8,7 @@ private:
     State* acceptState;
     
 public:
-    NFA(string condition);
+    NFA(string condition, int counter);
     ~NFA();
     State* getStartState();
     State* getAcceptState();
