@@ -54,7 +54,7 @@ vector<State*> State::getEpsilonStates(){
 }
 
 void State::addTransition(Transition trans){
-    if(trans.getConditionStr() == "\\L")
+    if(trans.getConditionStr() == "[\\L]")
         epsilonTransitions.push_back(trans);
     else
         transitions.push_back(trans);

@@ -3,7 +3,7 @@
 
 Transition::Transition(string in, State* nState){
     conditionStr = "[" + in + "]";
-    condition = regex(in);
+    condition = regex(conditionStr);
     nextState = nState;
 }
 
