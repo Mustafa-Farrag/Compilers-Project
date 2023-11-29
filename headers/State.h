@@ -19,7 +19,7 @@ private:
 public:
     State(int n);
     State(int n, bool start, bool accept);
-    State(State* other, map<State*, State*>* stateGetter);
+    State(State* other, map<State*, State*>* stateGetter, int* counter);
     bool getIsStart();
     bool getIsAccept();
     void setIsStart(bool state);

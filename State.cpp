@@ -14,17 +14,17 @@ State::State(int n, bool start, bool accept){
     classType = "";
 }
 
-State::State(State* other, map<State*, State*>* stateGetter){
-    num = other->num;
+State::State(State* other, map<State*, State*>* stateGetter, int* counter){
+    num = (*counter)++;
     isStart = other->isStart;
     isAccept = other->isAccept;
 
     for (const auto& trans : other->transitions) {
-        transitions.push_back(new Transition(trans, stateGetter));
+        transitions.push_back(new Transition(trans, stateGetter, counter));
     }
 
     for (const auto& epsilonTrans : other->epsilonTransitions) {
-        epsilonTransitions.push_back(new Transition(epsilonTrans, stateGetter));
+        epsilonTransitions.push_back(new Transition(epsilonTrans, stateGetter, counter));
     }
 }
 

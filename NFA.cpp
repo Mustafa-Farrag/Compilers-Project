@@ -1,8 +1,8 @@
 #include "headers/NFA.h"
 
-NFA::NFA(string condition, int counter){
-    startState = new State(counter, true, false);
-    acceptState = new State(counter+1, false, true);
+NFA::NFA(string condition, int* counter){
+    startState = new State((*counter)++, true, false);
+    acceptState = new State((*counter)++, false, true);
     startState->addTransition(new Transition(condition, acceptState));
 }
 
@@ -11,14 +11,14 @@ NFA::NFA(State* start, State* end){
     acceptState = end;
 }
 
-NFA::NFA(NFA* other){
+NFA::NFA(NFA* other, int* counter){
     map<State*, State*> stateGetter;
-    startState = new State(other->startState, &stateGetter);
+    startState = new State(other->startState, &stateGetter, counter);
 
     if (stateGetter.find(other->acceptState) != stateGetter.end())
         acceptState = stateGetter[other->acceptState];
     else
-        acceptState = new State(other->acceptState, &stateGetter);
+        acceptState = new State(other->acceptState, &stateGetter, counter);
 }
 
 NFA::~NFA(){

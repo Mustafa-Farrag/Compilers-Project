@@ -3,11 +3,11 @@
 #include "headers/State.h"
 #include "headers/Transition.h"
 
-NFAHandler :: NFAHandler(){}
+NFAHandler :: NFAHandler(){ counter = 0; }
 
 NFA* NFAHandler :: performUnion(NFA* nfa1, NFA* nfa2){
-    State* newStartState = new State(0, true, false);
-    State* newAcceptanceState = new State(0, false, true);
+    State* newStartState = new State(counter++, true, false);
+    State* newAcceptanceState = new State(counter++, false, true);
 
     nfa1->getStartState()->setIsStart(false);
     nfa2->getStartState()->setIsStart(false);
@@ -32,13 +32,13 @@ NFA* NFAHandler :: performUnion(NFA* nfa1, NFA* nfa2){
     return newNFA;
 }
 
-NFA* NFAHandler :: performConcatination(NFA* nfa1, NFA* nfa2) {
+NFA* NFAHandler :: performConcatination(NFA* nfa1, NFA* nfa2){
     nfa2->getStartState()->setIsStart(false);
     nfa1->getAcceptState()->setIsAccept(false);
 
     vector<Transition*> transitions = nfa2->getStartState()->getTransitions();
     vector<Transition*> epsTransitions = nfa2->getStartState()->getEpsilonTransitions();
-    
+
     for (int i = 0; i < transitions.size(); i++)
         nfa1->getAcceptState()->addTransition(transitions[i]);
     
@@ -51,8 +51,8 @@ NFA* NFAHandler :: performConcatination(NFA* nfa1, NFA* nfa2) {
 }
 
 NFA* NFAHandler :: performKleenClosure(NFA* nfa1) {
-    State* newStartState = new State(0, true, false);
-    State* newAcceptanceState = new State(0, false, true);
+    State* newStartState = new State(counter++, true, false);
+    State* newAcceptanceState = new State(counter++, false, true);
 
     nfa1->getStartState()->setIsStart(false);
     nfa1->getAcceptState()->setIsAccept(false);
@@ -73,28 +73,11 @@ NFA* NFAHandler :: performKleenClosure(NFA* nfa1) {
     return newNFA;
 }
 
-NFA* NFAHandler :: performPositiveClosure(NFA* nfa1) {
-    // NFA newNFA = performKleenClosure(nfa1);
+NFA* NFAHandler :: performPositiveClosure(NFA* nfa1){
+    NFA* clonedNFA = new NFA(nfa1, &counter);
+    NFA* newNFA = performKleenClosure(nfa1);
     
-    // State newStartState(0, true, false);
-
-    // newNFA.getStartState().start = false;
-
-    // Transition t1("\\L", nfa1.getStartState());
-    // Transition t2("\\L", nfa1.getStartState());
-    // Transition t3("\\L", newAcceptanceState);
-    // Transition t4("\\L", newAcceptanceState);
-
-    // nfa1.getAcceptState()->addTransition(t1);
-    // nfa1.getAcceptState()->addTransition(t3);
-
-    // newStartState.addTransition(t2);
-    // newStartState.addTransition(t4);
-    NFA* clonedNFA = new NFA(nfa1);
-    // newNFA.startState = newStartState;
-    // newNFA.acceptState = newAcceptanceState;
-    return clonedNFA;
-
+    return performConcatination(clonedNFA, newNFA);
 }
 
 NFA* NFAHandler :: performConcatinationCombination(vector<NFA*> nfas){
@@ -102,33 +85,27 @@ NFA* NFAHandler :: performConcatinationCombination(vector<NFA*> nfas){
     
     for (int i = 1; i < nfas.size(); i++)
         newNFA = performConcatination(newNFA, nfas[i]);
- 
+
     return newNFA;
 }
 
-NFA* NFAHandler :: performUnionCombination(vector<NFA*> nfas){
-    NFA* newNFA = new NFA("\\L", 0);
+NFA* NFAHandler :: performUnionCombination(vector<NFA*> nfas, vector<string> types){
+    State* newStartState = new State(counter++, true, false);
+    NFA* newNFA = new NFA(newStartState, nullptr);
+
     newNFA->setStartState(new State(0, true, false));
     newNFA->setAcceptState(nullptr);
 
     for (int i = 0; i < nfas.size(); i++) {
             newNFA->getStartState()->addTransition(new Transition("\\L", nfas[i]->getStartState()));
             nfas[i]->getStartState()->setIsStart(false);
+            nfas[i]->getAcceptState()->setClassType(types[i]);
     }
 
     return newNFA;
 }
 
-int main(){
-    NFA* nfa1 = new NFA("0-9", 0);
-    NFA* nfa2 = new NFA("a-z", 0);
-    NFA* nfa3 = new NFA("A-Z", 0);
-    vector<NFA*> nfs;
-    nfs.push_back(nfa1);
-    nfs.push_back(nfa2);
-    NFAHandler handler = NFAHandler();
-
-    NFA* newNFA = handler.performConcatinationCombination(nfs);
-    NFA* newNFAs = handler.performPositiveClosure(newNFA);
-
-}
+ NFA* NFAHandler::createNFA(string condition){
+    return new NFA(condition, &counter);
+ }
+ 

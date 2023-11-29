@@ -10,9 +10,9 @@ private:
     State* acceptState;
     
 public:
-    NFA(string condition, int counter);
+    NFA(string condition, int* counter);
     NFA(State* start, State* end);
-    NFA(NFA* other); 
+    NFA(NFA* other, int* counter); 
     ~NFA();
     State* getStartState();
     State* getAcceptState();
