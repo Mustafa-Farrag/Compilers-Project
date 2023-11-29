@@ -15,6 +15,7 @@ private:
 
 public:
     Transition(string in, State* nState);
+    Transition(Transition* other, map<State*, State*>* stateGetter);
     string getConditionStr();
     State* applyInput(string in);
 };

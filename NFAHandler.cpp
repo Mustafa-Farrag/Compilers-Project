@@ -5,7 +5,7 @@
 
 NFAHandler :: NFAHandler(){}
 
-NFA* NFAHandler :: performUnion(NFA* nfa1, NFA* nfa2) {
+NFA* NFAHandler :: performUnion(NFA* nfa1, NFA* nfa2){
     State* newStartState = new State(0, true, false);
     State* newAcceptanceState = new State(0, false, true);
 
@@ -15,11 +15,11 @@ NFA* NFAHandler :: performUnion(NFA* nfa1, NFA* nfa2) {
     nfa1->getAcceptState()->setIsAccept(false);
     nfa2->getAcceptState()->setIsAccept(false);
 
-    Transition t1("\\L", nfa1->getStartState());
-    Transition t2("\\L", nfa2->getStartState());
+    Transition* t1 = new Transition("\\L", nfa1->getStartState());
+    Transition* t2 = new Transition("\\L", nfa2->getStartState());
 
-    Transition t3("\\L", newAcceptanceState);
-    Transition t4("\\L", newAcceptanceState);
+    Transition* t3 = new Transition("\\L", newAcceptanceState);
+    Transition* t4 = new Transition("\\L", newAcceptanceState);
 
     newStartState->addTransition(t1);
     newStartState->addTransition(t2);
@@ -27,21 +27,17 @@ NFA* NFAHandler :: performUnion(NFA* nfa1, NFA* nfa2) {
     nfa1->getAcceptState()->addTransition(t3);
     nfa2->getAcceptState()->addTransition(t4);
 
-    NFA* newNFA = new NFA("\\L");
-    newNFA->setStartState(newStartState);
-    newNFA->setAcceptState(newAcceptanceState);
+    NFA* newNFA = new NFA(newStartState, newAcceptanceState);
 
     return newNFA;
-
 }
 
 NFA* NFAHandler :: performConcatination(NFA* nfa1, NFA* nfa2) {
-    
     nfa2->getStartState()->setIsStart(false);
     nfa1->getAcceptState()->setIsAccept(false);
 
-    vector<Transition> transitions = nfa2->getStartState()->getTransitions();
-    vector<Transition> epsTransitions = nfa2->getStartState()->getEpsilonTransitions();
+    vector<Transition*> transitions = nfa2->getStartState()->getTransitions();
+    vector<Transition*> epsTransitions = nfa2->getStartState()->getEpsilonTransitions();
     
     for (int i = 0; i < transitions.size(); i++)
         nfa1->getAcceptState()->addTransition(transitions[i]);
@@ -49,9 +45,7 @@ NFA* NFAHandler :: performConcatination(NFA* nfa1, NFA* nfa2) {
     for (int i = 0; i < epsTransitions.size(); i++)
         nfa1->getAcceptState()->addTransition(epsTransitions[i]);
 
-    NFA* newNFA = new NFA("\\L");
-    newNFA->setStartState(nfa1->getStartState());
-    newNFA->setAcceptState(nfa2->getAcceptState());
+    NFA* newNFA = new NFA(nfa1->getStartState(), nfa2->getAcceptState());
 
     return newNFA;
 }
@@ -63,10 +57,10 @@ NFA* NFAHandler :: performKleenClosure(NFA* nfa1) {
     nfa1->getStartState()->setIsStart(false);
     nfa1->getAcceptState()->setIsAccept(false);
 
-    Transition t1("\\L", nfa1->getStartState());
-    Transition t2("\\L", nfa1->getStartState());
-    Transition t3("\\L", newAcceptanceState);
-    Transition t4("\\L", newAcceptanceState);
+    Transition* t1 = new Transition("\\L", nfa1->getStartState());
+    Transition* t2 = new Transition("\\L", nfa1->getStartState());
+    Transition* t3 = new Transition("\\L", newAcceptanceState);
+    Transition* t4 = new Transition("\\L", newAcceptanceState);
 
     nfa1->getAcceptState()->addTransition(t1);
     nfa1->getAcceptState()->addTransition(t3);
@@ -74,14 +68,12 @@ NFA* NFAHandler :: performKleenClosure(NFA* nfa1) {
     newStartState->addTransition(t2);
     newStartState->addTransition(t4);
 
-    NFA* newNFA = new NFA("\\L");
-    newNFA->setStartState(newStartState);
-    newNFA->setAcceptState(newAcceptanceState);
+    NFA* newNFA = new NFA(newStartState, newAcceptanceState);
 
     return newNFA;
 }
 
-NFA* NFAHandler :: performKleenClosurePlus(NFA* nfa1) {
+NFA* NFAHandler :: performPositiveClosure(NFA* nfa1) {
     // NFA newNFA = performKleenClosure(nfa1);
     
     // State newStartState(0, true, false);
@@ -98,11 +90,10 @@ NFA* NFAHandler :: performKleenClosurePlus(NFA* nfa1) {
 
     // newStartState.addTransition(t2);
     // newStartState.addTransition(t4);
-
-    NFA newNFA("\\L");
+    NFA* clonedNFA = new NFA(nfa1);
     // newNFA.startState = newStartState;
     // newNFA.acceptState = newAcceptanceState;
-    return &newNFA;
+    return clonedNFA;
 
 }
 
@@ -116,12 +107,12 @@ NFA* NFAHandler :: performConcatinationCombination(vector<NFA*> nfas){
 }
 
 NFA* NFAHandler :: performUnionCombination(vector<NFA*> nfas){
-    NFA* newNFA = new NFA("\\L");
+    NFA* newNFA = new NFA("\\L", 0);
     newNFA->setStartState(new State(0, true, false));
     newNFA->setAcceptState(nullptr);
 
     for (int i = 0; i < nfas.size(); i++) {
-            newNFA->getStartState()->addTransition(Transition("\\L", nfas[i]->getStartState()));
+            newNFA->getStartState()->addTransition(new Transition("\\L", nfas[i]->getStartState()));
             nfas[i]->getStartState()->setIsStart(false);
     }
 
@@ -129,16 +120,15 @@ NFA* NFAHandler :: performUnionCombination(vector<NFA*> nfas){
 }
 
 int main(){
-    NFA* nfa1 = new NFA("0-9");
-    NFA* nfa2 = new NFA("a-z");
-    NFA* nfa3 = new NFA("A-Z");
+    NFA* nfa1 = new NFA("0-9", 0);
+    NFA* nfa2 = new NFA("a-z", 0);
+    NFA* nfa3 = new NFA("A-Z", 0);
     vector<NFA*> nfs;
     nfs.push_back(nfa1);
     nfs.push_back(nfa2);
-    nfs.push_back(nfa3);
-
     NFAHandler handler = NFAHandler();
 
     NFA* newNFA = handler.performConcatinationCombination(nfs);
+    NFA* newNFAs = handler.performPositiveClosure(newNFA);
 
 }

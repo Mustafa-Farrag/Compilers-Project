@@ -12,17 +12,22 @@ private:
     int num;
     bool isStart;
     bool isAccept;
-    vector<Transition> transitions;
-    vector<Transition> epsilonTransitions;
+    string classType;
+    vector<Transition*> transitions;
+    vector<Transition*> epsilonTransitions;
 
 public:
     State(int n);
     State(int n, bool start, bool accept);
+    State(State* other, map<State*, State*>* stateGetter);
     bool getIsStart();
     bool getIsAccept();
-    vector<Transition> getTransitions();
-    vector<Transition> getEpsilonTransitions();
+    void setIsStart(bool state);
+    void setIsAccept(bool state);
+    void setClassType(string type);
+    vector<Transition*> getTransitions();
+    vector<Transition*> getEpsilonTransitions();
     vector<State*> getEpsilonStates();
-    void addTransition(Transition trans);
+    void addTransition(Transition* trans);
     vector<State*> applyInput(string in);
 };

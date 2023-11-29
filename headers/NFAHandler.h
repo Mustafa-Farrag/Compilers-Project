@@ -12,12 +12,9 @@ public:
     NFA* performUnion(NFA* nfa1, NFA* nfa2);
     NFA* performConcatination(NFA* nfa1, NFA* nfa2);
     NFA* performKleenClosure(NFA* nfa);
-    NFA* performKleenClosurePlus(NFA* nfa);
+    NFA* performPositiveClosure(NFA* nfa);
     NFA* performUnionCombination(vector<NFA*> nfas);
-    NFA* performConcatinationCombination(vector<NFA*> nfas);    
-
-private:
-
+    NFA* performConcatinationCombination(vector<NFA*> nfas);
 };
 
 #endif

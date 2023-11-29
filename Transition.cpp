@@ -7,6 +7,19 @@ Transition::Transition(string in, State* nState){
     nextState = nState;
 }
 
+Transition::Transition(Transition* other,  map<State*, State*>* stateGetter){
+    conditionStr = other->conditionStr;
+    condition = regex(other->conditionStr);
+
+    if (stateGetter->find(other->nextState) != stateGetter->end())
+        nextState = (*stateGetter)[other->nextState];
+    else{
+        nextState = new State(other->nextState, stateGetter);
+        (*stateGetter)[other->nextState] = nextState; 
+    }
+    
+}
+
 string Transition::getConditionStr(){
     return conditionStr;
 }

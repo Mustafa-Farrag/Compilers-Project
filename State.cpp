@@ -11,6 +11,21 @@ State::State(int n, bool start, bool accept){
     num = n;
     isStart = start;
     isAccept = accept;
+    classType = "";
+}
+
+State::State(State* other, map<State*, State*>* stateGetter){
+    num = other->num;
+    isStart = other->isStart;
+    isAccept = other->isAccept;
+
+    for (const auto& trans : other->transitions) {
+        transitions.push_back(new Transition(trans, stateGetter));
+    }
+
+    for (const auto& epsilonTrans : other->epsilonTransitions) {
+        epsilonTransitions.push_back(new Transition(epsilonTrans, stateGetter));
+    }
 }
 
 bool State::getIsStart(){
@@ -21,11 +36,23 @@ bool State::getIsAccept(){
     return isAccept;
 }
 
-vector<Transition> State::getTransitions(){
+void State::setIsStart(bool state){
+    isStart = state;
+}
+
+void State::setIsAccept(bool state){
+    isAccept = state;
+}
+
+void State::setClassType(string type){
+    classType = type;
+}
+
+vector<Transition*> State::getTransitions(){
     return transitions;
 }
 
-vector<Transition> State::getEpsilonTransitions(){
+vector<Transition*> State::getEpsilonTransitions(){
     return epsilonTransitions;
 }
 
@@ -34,7 +61,7 @@ vector<State*> State::getEpsilonStates(){
     queue<State*> statesQueue;
 
     for(auto trans: epsilonTransitions){
-        State* nextS = trans.applyInput("");
+        State* nextS = trans->applyInput("");
         statesQueue.push(nextS);
     }
 
@@ -42,7 +69,7 @@ vector<State*> State::getEpsilonStates(){
         State* state = statesQueue.front();
 
         for(auto trans: state->epsilonTransitions){
-            State* nextS = trans.applyInput("");
+            State* nextS = trans->applyInput("");
             statesQueue.push(nextS);
         }
 
@@ -53,8 +80,8 @@ vector<State*> State::getEpsilonStates(){
     return states;
 }
 
-void State::addTransition(Transition trans){
-    if(trans.getConditionStr() == "[\\L]")
+void State::addTransition(Transition* trans){
+    if(trans->getConditionStr() == "[\\L]")
         epsilonTransitions.push_back(trans);
     else
         transitions.push_back(trans);
@@ -63,7 +90,7 @@ void State::addTransition(Transition trans){
 vector<State*> State::applyInput(string in){
     vector<State*> nextStates;
     for(auto transition:transitions){
-        State* nextSt = transition.applyInput(in);
+        State* nextSt = transition->applyInput(in);
         if(nextSt != nullptr) nextStates.push_back(nextSt);
     }
     return nextStates;
