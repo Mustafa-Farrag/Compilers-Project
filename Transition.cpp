@@ -2,7 +2,7 @@
 #include "headers/State.h"
 
 Transition::Transition(string in, State* nState){
-    conditionStr = in;
+    conditionStr = "[" + in + "]";
     condition = regex(in);
     nextState = nState;
 }
@@ -12,7 +12,7 @@ string Transition::getConditionStr(){
 }
 
 State* Transition::applyInput(string in){
-    if(conditionStr == "\\L"){
+    if(conditionStr == "[\\L]"){
         return nextState;
     }
     
