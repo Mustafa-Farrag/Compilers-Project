@@ -31,9 +31,25 @@ vector<Transition> State::getEpsilonTransitions(){
 
 vector<State*> State::getEpsilonStates(){
     vector<State*> states;
+    queue<State*> statesQueue;
+
     for(auto trans: epsilonTransitions){
-        states.push_back(trans.applyInput(""));
+        State* nextS = trans.applyInput("");
+        statesQueue.push(nextS);
     }
+
+    while(!statesQueue.empty()){
+        State* state = statesQueue.front();
+
+        for(auto trans: state->epsilonTransitions){
+            State* nextS = trans.applyInput("");
+            statesQueue.push(nextS);
+        }
+
+        states.push_back(state);
+        statesQueue.pop();
+    }
+
     return states;
 }
 
