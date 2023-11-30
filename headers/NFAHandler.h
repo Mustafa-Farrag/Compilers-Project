@@ -1,9 +1,7 @@
-#ifndef NFAHANDLER_H
-#define NFAHANDLER_H
+#pragma once
 
 #include <bits/stdc++.h>
 #include "NFA.h"
-
 using namespace std;
 
 class NFAHandler {
@@ -16,8 +14,7 @@ public:
     NFA* performConcatination(NFA* nfa1, NFA* nfa2);
     NFA* performKleenClosure(NFA* nfa);
     NFA* performPositiveClosure(NFA* nfa);
-    NFA* performUnionCombination(vector<NFA*> nfas, vector<string> types);
+    NFA* performUnionCombination(vector<NFA*> nfas);
     NFA* performConcatinationCombination(vector<NFA*> nfas);
+    NFA* performUnionCombinationOneAccept(vector<NFA*> nfas);
 };
-
-#endif

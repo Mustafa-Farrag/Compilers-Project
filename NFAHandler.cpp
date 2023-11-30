@@ -89,17 +89,28 @@ NFA* NFAHandler :: performConcatinationCombination(vector<NFA*> nfas){
     return newNFA;
 }
 
-NFA* NFAHandler :: performUnionCombination(vector<NFA*> nfas, vector<string> types){
+NFA* NFAHandler :: performUnionCombination(vector<NFA*> nfas){
     State* newStartState = new State(counter++, true, false);
     NFA* newNFA = new NFA(newStartState, nullptr);
-
-    newNFA->setStartState(new State(0, true, false));
-    newNFA->setAcceptState(nullptr);
 
     for (int i = 0; i < nfas.size(); i++) {
             newNFA->getStartState()->addTransition(new Transition("\\L", nfas[i]->getStartState()));
             nfas[i]->getStartState()->setIsStart(false);
-            nfas[i]->getAcceptState()->setClassType(types[i]);
+    }
+
+    return newNFA;
+}
+
+NFA* NFAHandler :: performUnionCombinationOneAccept(vector<NFA*> nfas){
+    State* newStartState = new State(counter++, true, false);
+    State* newAcceptanceState = new State(counter++, false, true);
+    NFA* newNFA = new NFA(newStartState, newAcceptanceState);
+
+    for (int i = 0; i < nfas.size(); i++) {
+            newNFA->getStartState()->addTransition(new Transition("\\L", nfas[i]->getStartState()));
+            nfas[i]->getStartState()->setIsStart(false);
+            nfas[i]->getAcceptState()->setIsAccept(false);
+            nfas[i]->getAcceptState()->addTransition(new Transition("\\L", newAcceptanceState));
     }
 
     return newNFA;

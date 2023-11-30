@@ -1,21 +1,23 @@
-#ifndef EXPRESSIONEVALUATOR_H
-#define EXPRESSIONEVALUATOR_H
+#pragma once
 
 #include <bits/stdc++.h>
 #include <regex>
-
+#include "NFA.h"
+#include "NFAHandler.h"
 using namespace std;
 
 class ExpressionEvaluator {
 public:
-    ExpressionEvaluator(map<string, string> regularDefs);
-    string evaluateRegExpression(string reg);  
+    ExpressionEvaluator();
+    NFA* computeCombinedNFA(map<string, string> rd, map<string, string> re, set<string> keywords, set<string> puncts);
 
 private:
-    map<string, string> regularDefs;  
+    NFAHandler* handler;
+    map<string, string> regularDefs;
     string removeRegExpressionDep (string expression);
     string infixToPostfix(string infix);
-    string evaluatePostfix(string postfix);
+    NFA* evaluateRegExpression(string reg, string type);
+    NFA* evaluatePostfix(string postfix);
+    NFA* evaluateKeyword(string keyword);
+    NFA* evaluatePuncts(set<string> puncts);
 };
-
-#endif

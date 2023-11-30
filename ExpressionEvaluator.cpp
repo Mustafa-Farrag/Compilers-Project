@@ -1,6 +1,10 @@
 #include "headers/ExpressionEvaluator.h"
+#include "headers/NFA.h"
+#include "headers/NFAHandler.h"
 
-ExpressionEvaluator :: ExpressionEvaluator(map<string, string> regularDefs): regularDefs(regularDefs) {}
+ExpressionEvaluator :: ExpressionEvaluator(){
+    handler = new NFAHandler();
+}
 
 string ExpressionEvaluator :: removeRegExpressionDep (string expression) {
         int start = 0;
@@ -105,9 +109,9 @@ string ExpressionEvaluator :: infixToPostfix (string infix) {
     return postFix;
 }
 
-string ExpressionEvaluator :: evaluatePostfix(string postfix){
+NFA* ExpressionEvaluator :: evaluatePostfix(string postfix){
     
-    vector<string> stack;
+    vector<NFA*> stack;
     string operators = "*+|^";
     string operand = "";
     int i = 0;
@@ -115,7 +119,7 @@ string ExpressionEvaluator :: evaluatePostfix(string postfix){
         if (operators.find(c) == operators.npos || operators.find(c) != operators.npos && i > 0 && postfix[i-1] == '\\' ) {
             // Operand encountered, push onto the stack
             if (c == ' '){
-                stack.push_back(operand);
+                stack.push_back(handler->createNFA(operand));
                 operand = "";
             } else {
                 if (operators.find(c) != operators.npos){
@@ -127,32 +131,32 @@ string ExpressionEvaluator :: evaluatePostfix(string postfix){
 
         } else {
             if (c == '*'){
-                string operand = stack.back();
+                NFA* operandNFA = stack.back();
                 stack.pop_back();
-                stack.push_back("kleen_closure(" + operand + ")");
+                stack.push_back(handler->performKleenClosure(operandNFA));
             }
             else if (c == '+'){
-                string operand = stack.back();
+                NFA* operandNFA = stack.back();
                 stack.pop_back();
-                stack.push_back("kleen_closure+(" + operand + ")");
+                stack.push_back(handler->performPositiveClosure(operandNFA));
             }
             else if (c == '^'){
-                string operand2 = stack.back();
+                NFA* operandNFA2 = stack.back();
                 stack.pop_back();
 
-                string operand1 = stack.back();
+                NFA* operandNFA1 = stack.back();
                 stack.pop_back();
 
-                stack.push_back("concate(" + operand1 + ", " + operand2 + ")");
+                stack.push_back(handler->performConcatination(operandNFA1, operandNFA2));
             }
             else{
-                string operand2 = stack.back();
+                NFA* operandNFA2 = stack.back();
                 stack.pop_back();
 
-                string operand1 = stack.back();
+                NFA* operandNFA1 = stack.back();
                 stack.pop_back();
 
-                stack.push_back("union(" + operand1 + ", " + operand2 + ")");
+                stack.push_back(handler->performUnion(operandNFA1, operandNFA2));
             }
         }
         i++;
@@ -161,17 +165,57 @@ string ExpressionEvaluator :: evaluatePostfix(string postfix){
     return stack.back();
 }
 
-string ExpressionEvaluator :: evaluateRegExpression(string reg){
+NFA* ExpressionEvaluator :: evaluateRegExpression(string reg, string type){
     reg = removeRegExpressionDep(reg);
-    
     reg.erase(remove_if(reg.begin(), reg.end(), ::isspace), reg.end());
 
     string postfix = infixToPostfix(reg);
 
-    string result = evaluatePostfix(postfix);
+    NFA* resultNFA = evaluatePostfix(postfix);
+    resultNFA->getAcceptState()->setClassType(type);
 
-    return result;
+    return resultNFA;
 }
 
+NFA* ExpressionEvaluator :: evaluateKeyword(string keyword){
+    vector<NFA*> nfas;
 
+    for(auto ch: keyword){
+        nfas.push_back(handler->createNFA(ch+""));
+    }
 
+    NFA* resultNFA = handler->performConcatinationCombination(nfas);
+    resultNFA->getAcceptState()->setClassType(keyword);
+
+    return resultNFA;
+}
+
+NFA* ExpressionEvaluator :: evaluatePuncts(set<string> puncts){
+    vector<NFA*> nfas;
+
+    for (const auto& punct : puncts) {
+        nfas.push_back(handler->createNFA(punct+""));
+    }
+
+    NFA* resultNFA = handler->performUnionCombinationOneAccept(nfas);
+    resultNFA->getAcceptState()->setClassType("Punctuation");
+
+    return resultNFA;
+}
+
+NFA* ExpressionEvaluator :: computeCombinedNFA(map<string, string> rd, map<string, string> re, set<string> keywords, set<string> puncts){
+    regularDefs = rd;
+    vector<NFA*> nfas;
+
+    for(auto &pair: re){
+        nfas.push_back(evaluateRegExpression(pair.second, pair.first));
+    }
+
+    for(auto &keyword: keywords){
+        nfas.push_back(evaluateKeyword(keyword));
+    }
+
+    nfas.push_back(evaluatePuncts(puncts));
+
+    return handler->performUnionCombination(nfas);
+}
