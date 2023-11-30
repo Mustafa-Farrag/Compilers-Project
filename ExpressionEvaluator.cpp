@@ -60,6 +60,10 @@ string ExpressionEvaluator :: infixToPostfix (string infix) {
             new_infix += infix[i];
             new_infix += "^";
         }
+    else if(i != infix.length()-1 && operators.find(infix[i]) == operators.npos && operators.find(infix[i+1]) == operators.npos && !(infix[i] == '-' || infix[i] == '\\' || infix[i+1] == '-')){
+        new_infix += infix[i];
+        new_infix += "^";
+    }
     else
         new_infix += infix[i];
     i++;
@@ -180,8 +184,8 @@ NFA* ExpressionEvaluator :: evaluateRegExpression(string reg, string type){
 NFA* ExpressionEvaluator :: evaluateKeyword(string keyword){
     vector<NFA*> nfas;
 
-    for(auto ch: keyword){
-        nfas.push_back(handler->createNFA(ch+""));
+    for(char ch: keyword){
+        nfas.push_back(handler->createNFA(string(1, ch)));
     }
 
     NFA* resultNFA = handler->performConcatinationCombination(nfas);
@@ -193,8 +197,8 @@ NFA* ExpressionEvaluator :: evaluateKeyword(string keyword){
 NFA* ExpressionEvaluator :: evaluatePuncts(set<string> puncts){
     vector<NFA*> nfas;
 
-    for (const auto& punct : puncts) {
-        nfas.push_back(handler->createNFA(punct+""));
+    for (set<string>::iterator punct = puncts.begin(); punct != puncts.end(); ++punct) {
+        nfas.push_back(handler->createNFA(*punct+""));
     }
 
     NFA* resultNFA = handler->performUnionCombinationOneAccept(nfas);
@@ -211,8 +215,8 @@ NFA* ExpressionEvaluator :: computeCombinedNFA(map<string, string> rd, map<strin
         nfas.push_back(evaluateRegExpression(pair.second, pair.first));
     }
 
-    for(auto &keyword: keywords){
-        nfas.push_back(evaluateKeyword(keyword));
+    for (set<string>::iterator keyword = keywords.begin(); keyword != keywords.end(); ++keyword) {
+        nfas.push_back(evaluateKeyword(*keyword));
     }
 
     nfas.push_back(evaluatePuncts(puncts));
