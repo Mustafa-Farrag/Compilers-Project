@@ -1,5 +1,6 @@
 #include "headers/Transition.h"
 #include "headers/State.h"
+#include <regex>
 
 Transition::Transition(string in, State* nState){
     conditionStr = "[" + in + "]";
@@ -25,13 +26,14 @@ string Transition::getConditionStr(){
 }
 
 State* Transition::applyInput(string in){
-    if(conditionStr == "[\\L]"){
+    if(conditionStr == "[\\L]" || conditionStr == in){
         return nextState;
     }
     
     if (regex_match(in, condition)) {
         return nextState;
     } else {
+        // cout<< conditionStr << endl;
         return nullptr;
     }
 }

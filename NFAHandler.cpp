@@ -2,6 +2,8 @@
 #include "headers/NFA.h"
 #include "headers/State.h"
 #include "headers/Transition.h"
+#include <map>
+#include <stack>
 
 NFAHandler :: NFAHandler(){ counter = 0; }
 
@@ -114,6 +116,41 @@ NFA* NFAHandler :: performUnionCombinationOneAccept(vector<NFA*> nfas){
     }
 
     return newNFA;
+}
+
+map<State*, map<string, vector<State*>>> NFAHandler :: getTransitionTable(State* startState){
+    map<State*, map<string, vector<State*>>> transitionTable;
+    stack<State*> remainingStates;
+
+    remainingStates.push(startState);
+
+    while(!remainingStates.empty()){
+        State* curr = remainingStates.top();
+        remainingStates.pop();
+        
+        //get epsilon transitions
+        vector<State*> currEpsStates = curr->getEpsilonStates();
+        for(auto s: currEpsStates){
+            remainingStates.push(s);
+        }
+        map<string, vector<State*>> inputTransPairs;
+        inputTransPairs.insert(pair<string, vector<State*>>("\\L", currEpsStates));
+
+        //get non epsilon transitions
+        vector<Transition*> Trans = curr->getTransitions();
+        for(auto t: Trans){
+            vector<State*> nStates = curr->applyInput(t->getConditionStr());
+            for (auto ns: nStates){
+                remainingStates.push(ns);
+            }
+            inputTransPairs.insert(pair<string, vector<State*>>(t->getConditionStr(), nStates));
+        }
+
+        //update transition map
+        transitionTable.insert(pair<State*, map<string, vector<State*>>>(curr, inputTransPairs));
+    }
+
+    return transitionTable;
 }
 
  NFA* NFAHandler::createNFA(string condition){

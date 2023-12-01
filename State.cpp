@@ -80,6 +80,31 @@ vector<State*> State::getEpsilonStates(){
     return states;
 }
 
+// //new for NFA transition table construction
+// vector<State*> State::getNonEpsilonStates(){
+//     vector<State*> states;
+//     queue<State*> statesQueue;
+
+//     for(auto trans: transitions){
+//         State* nextS = trans->applyInput(trans->getConditionStr());
+//         statesQueue.push(nextS);
+//     }
+
+//     while(!statesQueue.empty()){
+//         State* state = statesQueue.front();
+
+//         for(auto trans: state->epsilonTransitions){
+//             State* nextS = trans->applyInput("");
+//             statesQueue.push(nextS);
+//         }
+
+//         states.push_back(state);
+//         statesQueue.pop();
+//     }
+
+//     return states;
+// }
+
 void State::addTransition(Transition* trans){
     if(trans->getConditionStr() == "[\\L]")
         epsilonTransitions.push_back(trans);
@@ -91,7 +116,9 @@ vector<State*> State::applyInput(string in){
     vector<State*> nextStates;
     for(auto transition:transitions){
         State* nextSt = transition->applyInput(in);
-        if(nextSt != nullptr) nextStates.push_back(nextSt);
+        if(nextSt != nullptr){
+             nextStates.push_back(nextSt);
+        }
     }
     return nextStates;
 }
