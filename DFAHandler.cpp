@@ -7,11 +7,11 @@
 #include <stack>
 
 DFAHandler :: DFAHandler(map<int, State*> idStatesMap){
-    idStatesMap = idStatesMap;
+    idStatesMap2 = idStatesMap;
     map<string, set<int>> nStates_To_NStates; 
 }
 
-map<string, map<string, string>> DFAHandler :: getDFATransitionTable(map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
+map<string, map<string, string>> DFAHandler :: getDFATransitionTable(   map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
     map<string, map<string, string>> DFATransitionTable;
     // map<string, set<int>> sState_To_NStates;
 
@@ -44,7 +44,7 @@ map<string, map<string, string>> DFAHandler :: getDFATransitionTable(map<int, ma
         set<int> curr = remainingStates.top();
         remainingStates.pop();
         if(doneStates.find(getConcatenatedString(curr)) != doneStates.end()){
-            cout<<"done before"<<endl;
+            // cout<<"done before"<<endl;
             continue;
         }
 
@@ -52,7 +52,7 @@ map<string, map<string, string>> DFAHandler :: getDFATransitionTable(map<int, ma
 
 
         set<string> inputs = getAllInputs(curr);
-        cout<<"iam here2"<<endl;
+        // cout<<"iam here2"<<endl;
 
 
         map<string, string> inputTransPair;
@@ -65,7 +65,7 @@ map<string, map<string, string>> DFAHandler :: getDFATransitionTable(map<int, ma
 
             
             for(auto id: curr){
-                State* s = idStatesMap.at(id);
+                State* s = idStatesMap2.at(id);
 
                 vector<State*> nextStates =  s->applyInput(input);
                 set<int> nextStatesidsTemp = get_ids(nextStates);
@@ -107,8 +107,8 @@ string DFAHandler :: getConcatenatedString(set<int> states){
 set<string> DFAHandler :: getAllInputs(set<int> states){
     set<string> inputs;
     for(auto id: states) {
-        cout<<to_string(id)<<endl;
-        State* curr = idStatesMap.at(id);
+        // cout<<to_string(id)<<endl;
+        State* curr = idStatesMap2.at(id);
         
 
         vector<Transition*> trans = curr->getTransitions(); 
@@ -132,7 +132,7 @@ map<string, set<int>>  DFAHandler::getnStates_To_NStates(){
 }
 
 map<int, State*> DFAHandler::getidStatesMap(){
-    return idStatesMap;
+    return idStatesMap2;
 }
 
 

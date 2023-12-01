@@ -22,7 +22,7 @@ int main(){
     NFAHandler* nfahandler = new NFAHandler();
     // cout << "iam here" <<endl;
     map<int, map<string, vector<int>>> nfaTransitionTable = nfahandler->getTransitionTable(combinedNFA->getStartState());
-    cout << nfaTransitionTable.empty() <<endl;
+    cout << "NFA transition Table size: " << nfaTransitionTable.size()  <<endl;
 
     map<string, vector<int>> inputTranstionPairs = nfaTransitionTable.at(combinedNFA->getStartState()->getNum());
     cout << inputTranstionPairs.empty() <<endl;
@@ -34,7 +34,7 @@ int main(){
     DFAHandler* dfahandler = new DFAHandler(idStatesMap);
 
     map<string, map<string, string>> dfaTransitionTable = dfahandler->getDFATransitionTable(nfaTransitionTable, combinedNFA->getStartState());
-    cout << dfaTransitionTable.empty() <<endl;
+    cout << "DFA transition Table size: " << dfaTransitionTable.size() <<endl;
 
     printf("iam here");
 

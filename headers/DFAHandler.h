@@ -10,7 +10,7 @@ using namespace std;
 
 class DFAHandler {
 private:
-    map<int, State*> idStatesMap;
+    map<int, State*> idStatesMap2;
     map<string, set<int>> nStates_To_NStates;
 
     string getConcatenatedString(set<int> states);
