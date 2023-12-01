@@ -17,12 +17,15 @@ int main(){
     ExpressionEvaluator* ee = new ExpressionEvaluator();
     NFA* combinedNFA = ee->computeCombinedNFA(rd, re, keywords, puncts);
 
+    //new for NFA_to_DFA task
     NFAHandler* handler = new NFAHandler();
-    map<State*, map<string, vector<State*>>> nfaTransitionTable = handler->getTransitionTable(combinedNFA->getStartState());
+    map<int, map<string, vector<int>>> nfaTransitionTable = handler->getTransitionTable(combinedNFA->getStartState());
     cout << nfaTransitionTable.empty() <<endl;
 
-    map<string, vector<State*>> inputTranstionPairs = nfaTransitionTable.at(combinedNFA->getStartState());
+    map<string, vector<int>> inputTranstionPairs = nfaTransitionTable.at(combinedNFA->getStartState()->getNum());
     cout << inputTranstionPairs.empty() <<endl;
+
+    
 
     printf("iam here");
 

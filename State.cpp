@@ -36,6 +36,11 @@ bool State::getIsAccept(){
     return isAccept;
 }
 
+//new for NFA transisiton table formation
+int State::getNum(){
+    return num;
+}
+
 void State::setIsStart(bool state){
     isStart = state;
 }

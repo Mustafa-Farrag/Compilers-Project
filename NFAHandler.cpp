@@ -118,8 +118,8 @@ NFA* NFAHandler :: performUnionCombinationOneAccept(vector<NFA*> nfas){
     return newNFA;
 }
 
-map<State*, map<string, vector<State*>>> NFAHandler :: getTransitionTable(State* startState){
-    map<State*, map<string, vector<State*>>> transitionTable;
+map<int, map<string, vector<int>>> NFAHandler :: getTransitionTable(State* startState){
+    map<int, map<string, vector<int>>> transitionTable;
     stack<State*> remainingStates;
 
     remainingStates.push(startState);
@@ -130,24 +130,28 @@ map<State*, map<string, vector<State*>>> NFAHandler :: getTransitionTable(State*
         
         //get epsilon transitions
         vector<State*> currEpsStates = curr->getEpsilonStates();
+        vector<int> currEpsStatesNums;
         for(auto s: currEpsStates){
             remainingStates.push(s);
+            currEpsStatesNums.push_back(s->getNum());
         }
-        map<string, vector<State*>> inputTransPairs;
-        inputTransPairs.insert(pair<string, vector<State*>>("\\L", currEpsStates));
+        map<string, vector<int>> inputTransPairs;
+        inputTransPairs.insert(pair<string, vector<int>>("\\L", currEpsStatesNums));
 
         //get non epsilon transitions
         vector<Transition*> Trans = curr->getTransitions();
         for(auto t: Trans){
             vector<State*> nStates = curr->applyInput(t->getConditionStr());
+            vector<int> currNStatesNums;
             for (auto ns: nStates){
                 remainingStates.push(ns);
+                currNStatesNums.push_back(ns->getNum());
             }
-            inputTransPairs.insert(pair<string, vector<State*>>(t->getConditionStr(), nStates));
+            inputTransPairs.insert(pair<string, vector<int>>(t->getConditionStr(), currNStatesNums));
         }
 
         //update transition map
-        transitionTable.insert(pair<State*, map<string, vector<State*>>>(curr, inputTransPairs));
+        transitionTable.insert(pair<int, map<string, vector<int>>>(curr->getNum(), inputTransPairs));
     }
 
     return transitionTable;
