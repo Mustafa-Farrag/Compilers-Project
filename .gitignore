@@ -4,6 +4,7 @@ Temp.exe
 InputParser.exe
 a.exe
 NFAHandler.exe
+DFAHandler.exe
 Transition.exe
 NFA.exe
 ExpressionEvaluator.exe

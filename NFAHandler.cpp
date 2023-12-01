@@ -118,15 +118,25 @@ NFA* NFAHandler :: performUnionCombinationOneAccept(vector<NFA*> nfas){
     return newNFA;
 }
 
+//new for NFA_to_DFA task
 map<int, map<string, vector<int>>> NFAHandler :: getTransitionTable(State* startState){
     map<int, map<string, vector<int>>> transitionTable;
     stack<State*> remainingStates;
+    set<int> doneStates;
 
     remainingStates.push(startState);
 
     while(!remainingStates.empty()){
         State* curr = remainingStates.top();
         remainingStates.pop();
+
+        //has been done before
+        if(doneStates.find(curr->getNum()) != doneStates.end()){
+            // cout<<"done before"<<endl;
+            continue;
+        }
+
+        doneStates.insert(curr->getNum());
         
         //get epsilon transitions
         vector<State*> currEpsStates = curr->getEpsilonStates();
@@ -155,6 +165,47 @@ map<int, map<string, vector<int>>> NFAHandler :: getTransitionTable(State* start
     }
 
     return transitionTable;
+}
+
+//new for NFA_to_DFA task
+map<int, State*> NFAHandler :: getIdStateMap(State* startState){
+    map<int, State*> idStateMap;
+    stack<State*> remainingStates;
+    set<int> doneStates;
+
+    remainingStates.push(startState);
+
+    while(!remainingStates.empty()){
+        State* curr = remainingStates.top();
+        remainingStates.pop();
+
+        //has been done before
+        if(doneStates.find(curr->getNum()) != doneStates.end()){
+            // cout<<"done before"<<endl;
+            continue;
+        }
+
+        doneStates.insert(curr->getNum());
+        idStateMap.insert(pair<int, State*>(curr->getNum(), curr));
+        
+        //get epsilon transitions
+        vector<State*> currEpsStates = curr->getEpsilonStates();
+        vector<int> currEpsStatesNums;
+        for(auto s: currEpsStates){
+            remainingStates.push(s);
+        }
+
+        //get non epsilon transitions
+        vector<Transition*> Trans = curr->getTransitions();
+        for(auto t: Trans){
+            vector<State*> nStates = curr->applyInput(t->getConditionStr());
+            for (auto ns: nStates){
+                remainingStates.push(ns);
+            }
+        }
+    }
+
+    return idStateMap;
 }
 
  NFA* NFAHandler::createNFA(string condition){

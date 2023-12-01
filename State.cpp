@@ -5,6 +5,7 @@ State::State(int n){
     num = n;
     isStart = false;
     isAccept = false;
+    classType = "";
 }
 
 State::State(int n, bool start, bool accept){
