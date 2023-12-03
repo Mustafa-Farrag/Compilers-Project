@@ -11,7 +11,12 @@ DFAHandler :: DFAHandler(map<int, State*> idStatesMap){
     map<string, set<int>> nStates_To_NStates; 
 }
 
-map<string, map<string, string>> DFAHandler :: getDFATransitionTable(   map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
+map<string, map<string, string>> DFAHandler::getDFATransitionTable(){
+    return DFATransitionTable;
+}
+
+
+map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable(   map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
     map<string, map<string, string>> DFATransitionTable;
     // map<string, set<int>> sState_To_NStates;
 
@@ -92,7 +97,7 @@ map<string, map<string, string>> DFAHandler :: getDFATransitionTable(   map<int,
         DFATransitionTable.insert(pair<string, map<string, string>>(currStateStr, inputTransPair));
 
     }
-
+    this->DFATransitionTable = DFATransitionTable;
     return DFATransitionTable;
 }
 

@@ -5,6 +5,8 @@
 #include "headers/NFAHandler.h"
 #include "headers/DFAHandler.h"
 #include "headers/ExpressionEvaluator.h"
+#include "headers/MinimizeDFA.h"
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -33,10 +35,12 @@ int main(){
 
     DFAHandler* dfahandler = new DFAHandler(idStatesMap);
 
-    map<string, map<string, string>> dfaTransitionTable = dfahandler->getDFATransitionTable(nfaTransitionTable, combinedNFA->getStartState());
+    map<string, map<string, string>> dfaTransitionTable = dfahandler->ConstructDFATransitionTable(nfaTransitionTable, combinedNFA->getStartState());
     cout << "DFA transition Table size: " << dfaTransitionTable.size() <<endl;
 
-    printf("iam here");
+    MinimizeDFA* minimizeDFA = new MinimizeDFA();
+    
+    minimizeDFA->constructMinimizedDFATable(dfahandler);
 
     return 0;
 }
