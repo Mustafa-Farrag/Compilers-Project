@@ -16,6 +16,14 @@ void DFAState::setTransition(string i, DFAState* nextState) {
     transitions[i] = nextState;
 }
 
+void DFAState:: setIsPhi(bool isPhi){
+    this->isPhi = isPhi;
+}
+
+bool DFAState:: getIsPhi(){
+    return this->isPhi;
+}
+
 unordered_map<string, DFAState*> DFAState::getTransitions(){
     return transitions;
 }

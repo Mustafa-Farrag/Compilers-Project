@@ -13,5 +13,5 @@ public:
     void setStartState(DFAState* start);
     DFAState* getStartState();
     void convertMap(const map<string, map<string, string>>& oldMap,
-                    string startState, map<string, string> &classType);
+                    string startState, map<string, string> &classType, string phistate);
 };

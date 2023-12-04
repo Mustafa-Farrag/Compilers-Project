@@ -8,6 +8,7 @@ class DFAState {
 
 private:
     string id;  
+    bool isPhi;
     bool isAccepting;
     string classType;
     unordered_map<string, DFAState*> transitions;
@@ -21,8 +22,10 @@ public:
     DFAState* getNextState(string input);
     string getId();
     bool getIsAccepting();
+    bool getIsPhi();
     string getClassType();
     void setId(string id);
+    void setIsPhi(bool isPhi);
     void setAccepting(bool isAccepting);
     void setClassType(string classType);
 };

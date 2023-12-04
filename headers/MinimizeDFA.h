@@ -6,6 +6,7 @@ using namespace std;
 class MinimizeDFA {
 private:
     string startState;
+    string phiState;
     map<string, string> oldclassType;
     map<string, string> classType;
     map<string, map<string, string>> minimizedTable;

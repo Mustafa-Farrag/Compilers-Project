@@ -11,12 +11,14 @@ DFAState* DFA::getStartState() {
 }
 
 void DFA::convertMap(
-    const map<string, map<string, string>>& oldMap, string startState, map<string, string> &classType) {
+    const map<string, map<string, string>>& oldMap, string startState, map<string, string> &classType, string phistate) {
 
     unordered_map<string, DFAState*> stateMap;
     set<string> set ;
     for (const auto& pair : oldMap) {
         string currentStateId = pair.first;
+
+        
         set.insert(currentStateId);
 
         DFAState* currentState = nullptr;
@@ -34,6 +36,10 @@ void DFA::convertMap(
                 currentState->setClassType(temp->second);
             }
         }
+        if(currentStateId == phistate){
+            currentState->setIsPhi(true);
+        }
+
         const auto& transitions = pair.second;
         for (const auto& transition : transitions) {
             string condition = transition.first;

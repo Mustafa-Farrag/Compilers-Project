@@ -145,7 +145,7 @@ bool MinimizeDFA:: isAcceptanceState(string state){
 
 DFA* MinimizeDFA::constructDFA(){
     DFA* dfa = new DFA();
-    dfa->convertMap(minimizedTable, startState, classType);
+    dfa->convertMap(minimizedTable, startState, classType, phiState);
     return dfa;
 }
 
@@ -167,6 +167,9 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
     
     // cout << groupIndex.size() << " \n";
     set<string> set;
+
+    phiState = to_string(groupIndex["phi"]);
+
     for (const auto pair : groupIndex) {
         string index = to_string(pair.second);
         string state = pair.first;
@@ -187,6 +190,7 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
             }
             table[index] = nextStates;
         }
+        
         if(isStartState(oldStartState, state)){
             startState = index;
         }
