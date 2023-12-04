@@ -26,6 +26,7 @@ public:
     void setIsStart(bool state);
     void setIsAccept(bool state);
     void setClassType(string type);
+    string getClassType();
     vector<Transition*> getTransitions();
     vector<Transition*> getEpsilonTransitions();
     vector<State*> getEpsilonStates();

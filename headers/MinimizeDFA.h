@@ -1,3 +1,4 @@
+#include "DFA.h"
 #include <bits/stdc++.h>
 #include <vector>
 #include <set>
@@ -7,12 +8,19 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <unordered_set>
 
 
 using namespace std;
 
 class MinimizeDFA {
 private:
+    
+    string startState;
+    map<string, string> classType;
+    map<string, map<string, string>> minimizedTable;
+
+    DFA* constructDFA();
     map<string, int> separateNonAcceptAndAcceptStates(
         map<string, set<int>> nStates_To_NStates, 
         map<int, State*> getidStatesMap);
@@ -24,5 +32,10 @@ private:
     void printMinizedTableToFile(map<string, map<string, string>> minimizedTable, set<string> transitions);
 
 public:
-    void constructMinimizedDFATable(DFAHandler* dfahandler);
+    DFA* constructMinimizedDFATable(DFAHandler* dfahandler);
+    map<string, map<string, string>> getMinimizedTable();
+    string getStartState();
+    map<string, string> getClassType();
+    bool isStartState(string state);
+    bool isAcceptanceState(string state);
 };

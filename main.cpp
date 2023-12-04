@@ -6,8 +6,9 @@
 #include "headers/DFAHandler.h"
 #include "headers/ExpressionEvaluator.h"
 #include "headers/MinimizeDFA.h"
-
+#include "headers/Analyzer.h"
 #include <bits/stdc++.h>
+
 using namespace std;
 
 int main(){
@@ -40,7 +41,15 @@ int main(){
 
     MinimizeDFA* minimizeDFA = new MinimizeDFA();
     
-    minimizeDFA->constructMinimizedDFATable(dfahandler);
+    DFA* dfa = minimizeDFA->constructMinimizedDFATable(dfahandler);
 
+    // delete dfahandler;
+
+    Analyzer* analyzer = new Analyzer(dfa);
+
+    // analyzer->analyze("test.java");
+    
+    cout << "print";
+    
     return 0;
 }
