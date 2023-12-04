@@ -13,10 +13,20 @@ map<string, int> MinimizeDFA:: separateNonAcceptAndAcceptStates(
     map<int, State*> getidStatesMap)
     {
     map<string, int> index;
+    map<string, int> acceptTypeIndex;
+    int currentIndex = 1;
     for (auto it = nStates_To_NStates.begin(); it != nStates_To_NStates.end(); ++it) {
         string state = it->first;
         if(isAcceptanceState(state)){
-            index[state] = 1;
+            auto existingIndex = acceptTypeIndex.find(state);
+            if(existingIndex != acceptTypeIndex.end()){
+                index[state] = existingIndex->second;
+                acceptTypeIndex[oldclassType[state]] = existingIndex->second;
+            }else{
+                index[state] = currentIndex;
+                acceptTypeIndex[oldclassType[state]] = currentIndex;
+                currentIndex++;
+            }
         }else{
             index[state] = 0;
         }

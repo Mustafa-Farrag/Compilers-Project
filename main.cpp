@@ -25,7 +25,7 @@ void printClassTypeHelper(DFAState* state, set<string> &set) {
 
 int main(){
     // parse input file
-    InputParser ip("input.txt");
+    InputParser ip("/home/gad/Compilers-Project/input.txt");
     map<string, string> rd = ip.getRD();
     map<string, string> re = ip.getRE();
     set<string> keywords = ip.getKeywords();
@@ -60,7 +60,7 @@ int main(){
 
     Analyzer* analyzer = new Analyzer(dfa);
 
-    analyzer->analyze("test.txt");
+    analyzer->analyze("/home/gad/Compilers-Project/test.txt");
 
     return 0;
 }

@@ -2,27 +2,31 @@
 #include "../headers/NFA.h"
 #include "../headers/State.h"
 #include "../headers/Transition.h"
+#include <vector>
+#include <map>
+#include <stack>
 
 DFAHandler :: DFAHandler(map<int, State*> idStatesMap){
     idStatesMap2 = idStatesMap;
     map<string, set<int>> nStates_To_NStates; 
 }
 
-DFAHandler :: ~DFAHandler(){
-    for (auto& pair : idStatesMap2) {
-        delete pair.second; 
-    }
-    idStatesMap2.clear();  
+// DFAHandler :: ~DFAHandler(){
+//     for (auto& pair : idStatesMap2) {
+//         delete pair.second; 
+//     }
+//     idStatesMap2.clear();  
 
-    nStates_To_NStates.clear();
-    DFATransitionTable.clear();
-    acceptanceStateToClassType.clear();
-}
+//     nStates_To_NStates.clear();
+//     DFATransitionTable.clear();
+//     acceptanceStateToClassType.clear();
+// }
 map<string, map<string, string>> DFAHandler::getDFATransitionTable(){
     return DFATransitionTable;
 }
 
-map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable(   map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
+
+map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable( map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
     map<string, map<string, string>> DFATransitionTable;
     // map<string, set<int>> sState_To_NStates;
 
