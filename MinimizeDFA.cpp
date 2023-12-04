@@ -1,5 +1,8 @@
 #include "headers/MinimizeDFA.h"
+#include "headers/DFAHandler.h"
+
 #include <iostream>
+using namespace std;
 
 /*
  * Separates acceptance states from non-acceptance states as 
@@ -80,23 +83,6 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
     return stateIndex;
 }
 
-// vector<vector<string>> MinimizeDFA::separateStatesIntoGroups(map<string, int> &groupIndex ){
-//      int maxIndex = 0;
-//     for (const auto& pair : groupIndex) {
-//         maxIndex = max(maxIndex, pair.second);
-//     }
-
-//     vector<vector<string>> groups(maxIndex);
-
-//     for (const auto& pair : groupIndex) {
-//         int index = pair.second;  
-//         string str = pair.first;
-//         groups[index].push_back(str);
-//     }
-
-//     return groups;
-// }
-
 void MinimizeDFA::appendDataToFile(const map<string, map<string, string>>& data, const set<string>& horizontalHeaders, const string& filename) {
     ofstream outputFile(filename, ios::app);
 
@@ -145,30 +131,12 @@ void MinimizeDFA::printMinizedTableToFile(map<string, map<string, string>> minim
     appendDataToFile(minimizedTable, secondHalf, filename);
 }
 
-bool MinimizeDFA:: isStartState(string state){
-    // map<int, State*> idStatesMap = dfahandler->getidStatesMap();
-    // map<string, set<int>> nStates_To_NStates = dfahandler->getnStates_To_NStates();
-    // set<int> nstates = nStates_To_NStates[state];
-    // for(auto s : nstates){
-    //     if(idStatesMap[s]->getIsStart()){
-    //         return true;
-    //     }
-    // }
-    // return false;
-   return startState == state;
+bool MinimizeDFA:: isStartState(string oldStartState, string state){
+   return oldStartState == state;
 }
 
 bool MinimizeDFA:: isAcceptanceState(string state){
-    // map<int, State*> idStatesMap = dfahandler->getidStatesMap();
-    // map<string, set<int>> nStates_To_NStates = dfahandler->getnStates_To_NStates();
-    // set<int> nstates = nStates_To_NStates[state];
-    // for(auto s : nstates){
-    //     if(idStatesMap[s]->getIsAccept()){
-    //         return idStatesMap[s]->getClassType();
-    //     }
-    // }
-    // return "";
-    if(classType.find(state) != classType.end()){
+    if(oldclassType.find(state) != classType.end()){
         return true;
     }
     return false;
@@ -181,14 +149,21 @@ DFA* MinimizeDFA::constructDFA(){
 }
 
 DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
+    string oldStartState = dfahandler->getStartState();
+    oldclassType = dfahandler->getAcceptanceStateToClassType();
+    set<string> k;
+    for(auto a : oldclassType){
+        k.insert(a.second);
+    }
+    
+
     map<string, map<string, string>> DFATransitionTable = dfahandler->getDFATransitionTable();
     set<string> transitions = formTransitions(DFATransitionTable);
     map<string, int> groupIndex = getIndexOfGroupForMinimized(dfahandler, transitions);
     map<string, map<string, string>> table;
     
-    startState = dfahandler->getStartState();
-    classType = dfahandler->getAcceptanceStateToClassType();
-
+    
+    cout << groupIndex.size() << " \n";
     for (const auto pair : groupIndex) {
         string index = to_string(pair.second);
         string state = pair.first;
@@ -207,29 +182,18 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
             }
             table[index] = nextStates;
         }
-        // if(isStartState(dfahandler, state)){
-        //     startState = index;
-        // }
-        // string type = CheckAcceptanceState(dfahandler, state);
-        // if(type != ""){
-        //     classType[index] = type;
-        // }
-        // oldNameToNewName[state] = index;
+        if(isStartState(oldStartState, state)){
+            startState = index;
+        }
+        if(isAcceptanceState(state)){
+            cout << oldclassType[state] << "  " << index << "\n";
+            classType[index] = oldclassType[state];
+        }
     }
-    this->minimizedTable = table;
-    // this->oldNameToNewName = oldNameToNewName;
-    // this->transitions = transitions;
+    minimizedTable = table;
     printMinizedTableToFile(minimizedTable, transitions);
     return constructDFA();
 }
-
-// set<string> MinimizeDFA::getTransitions(){
-//     return transitions;
-// }
-
-// map<string, string> MinimizeDFA:: getOldNameToNewName(){
-//     return oldNameToNewName;
-// }
 
 map<string, map<string, string>> MinimizeDFA:: getMinimizedTable(){
     return minimizedTable;
