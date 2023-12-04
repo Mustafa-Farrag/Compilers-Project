@@ -6,10 +6,24 @@
 #include "headers/DFAHandler.h"
 #include "headers/ExpressionEvaluator.h"
 #include "headers/MinimizeDFA.h"
+
 #include "headers/Analyzer.h"
 #include <bits/stdc++.h>
 
 using namespace std;
+set<string>  set2;
+
+void printClassTypeHelper(DFAState* state, set<string> &set) {
+    if(set2.find(state->getid()) != set2.end()) return;
+    set.insert(state->getClassType());
+    set2.insert(state->getid());
+    // Recursively iterate over transitions
+    for (const auto& transition : state->getTransitions()) {
+        printClassTypeHelper(transition.second, set);
+    }
+    return ;
+}
+
 
 int main(){
     InputParser ip("input.txt");
@@ -37,17 +51,20 @@ int main(){
     DFAHandler* dfahandler = new DFAHandler(idStatesMap);
 
     map<string, map<string, string>> dfaTransitionTable = dfahandler->ConstructDFATransitionTable(nfaTransitionTable, combinedNFA->getStartState());
+    
     cout << "DFA transition Table size: " << dfaTransitionTable.size() <<endl;
 
     MinimizeDFA* minimizeDFA = new MinimizeDFA();
     
     DFA* dfa = minimizeDFA->constructMinimizedDFATable(dfahandler);
 
-    // delete dfahandler;
+    set<string> set1;
+
+    printClassTypeHelper(dfa->getStartState(), set1);
 
     Analyzer* analyzer = new Analyzer(dfa);
 
-    // analyzer->analyze("test.java");
+    analyzer->analyze("test.java");
     
     cout << "print";
     

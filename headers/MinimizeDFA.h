@@ -17,6 +17,7 @@ class MinimizeDFA {
 private:
     
     string startState;
+    map<string, string> oldclassType;
     map<string, string> classType;
     map<string, map<string, string>> minimizedTable;
 
@@ -36,6 +37,6 @@ public:
     map<string, map<string, string>> getMinimizedTable();
     string getStartState();
     map<string, string> getClassType();
-    bool isStartState(string state);
+    bool isStartState(string old, string state);
     bool isAcceptanceState(string state);
 };

@@ -20,11 +20,11 @@ private:
     set<int> get_ids(vector<State*> nextStates);
 public:
     DFAHandler(map<int, State*> idStatesMap);
-    ~DFAHandler();
     map<int, State*> getidStatesMap();
     map<string, set<int>> getnStates_To_NStates();
     map<string, map<string, string>> ConstructDFATransitionTable(map<int, map<string, vector<int>>>, State* startState);
     map<string, map<string, string>> getDFATransitionTable();
     map<string, string> getAcceptanceStateToClassType();
     string getStartState();
+    ~DFAHandler();
 };

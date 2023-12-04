@@ -131,7 +131,6 @@ string DFAHandler :: getConcatenatedString(set<int> states){
     if(start){
         startState = concatenatedString;
     }
-    
     return concatenatedString;
 }
 

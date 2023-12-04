@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include "headers/Analyzer.h"
+#include <stack>
+#include <cctype>
 
 Analyzer:: Analyzer (DFA* dfa){
     this->dfa = dfa;
@@ -15,13 +17,54 @@ void Analyzer::analyze(string filepath) {
     }
 
     char character;
-    DFAState* currentState = dfa->getStartState();
-    while (inputFile.get(character)) {
-        cout << character;
-        if(currentState->getIsAccepting()){
-            cout << "  accepted "<< currentState->getClassType()<<"\n";
+    stack<char> charStack;
+    DFAState* start = dfa->getStartState();
+    DFAState* currentState = start;
+    bool read = true;
+    string type = "";
+    while (true) {
+        if(read){
+            inputFile.get(character); 
+            charStack.push(character);
         }
-        currentState = currentState->getNextState(character + "");
+        if (inputFile.eof()) {
+            break;  
+        } else if (inputFile.fail()) {
+            std::cerr << "Failed to read from the file." << std::endl;
+            break; 
+        }
+
+        string input(1, character);
+        if(isspace(character)){
+            string result = "";
+            while (!charStack.empty()) {
+                result = charStack.top() + result;  
+                charStack.pop();  
+            }
+            cout << result << "  " << type << "\n";
+            currentState = start;
+            read = true;
+            continue;
+        }
+        // cout << character << "  " <<currentState->getid() << " \n";
+        if(currentState->getIsAccepting()){
+            type = currentState->getClassType();
+        }
+        // else if(currentState->getNextState(input) == nullptr){
+        //     currentState = start;
+        //     read = true;
+        // }
+        currentState = currentState->getNextState(input);
+        
+        if(currentState == nullptr){
+            
+            currentState = start;
+            // cout << " start " << start->getid() << "\n";
+            read = false;
+        }else{
+            // cout << currentState->getid() << "\n";
+            read = true;
+        }
     }
 
     inputFile.close();
