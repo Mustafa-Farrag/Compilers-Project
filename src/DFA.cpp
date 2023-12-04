@@ -10,13 +10,14 @@ DFAState* DFA::getStartState() {
     return startState;
 }
 
-void DFA::convertMap(const map<string, map<string, string>>& oldMap,
-                    string startState, map<string, string> &classType){
+void DFA::convertMap(
+    const map<string, map<string, string>>& oldMap, string startState, map<string, string> &classType) {
 
     unordered_map<string, DFAState*> stateMap;
-
+    set<string> set ;
     for (const auto& pair : oldMap) {
         string currentStateId = pair.first;
+        set.insert(currentStateId);
 
         DFAState* currentState = nullptr;
 
@@ -45,6 +46,12 @@ void DFA::convertMap(const map<string, map<string, string>>& oldMap,
             } else {
                 nextState = new DFAState(nextStateId);
                 stateMap[nextStateId] = nextState;
+                auto temp = classType.find(nextStateId);
+                if(temp != classType.end()){
+                    nextState->setAccepting(true);
+                    nextState->setId(nextStateId);
+                    nextState->setClassType(temp->second);
+                }
             }
             currentState->setTransition(condition, nextState);
         }
@@ -53,4 +60,6 @@ void DFA::convertMap(const map<string, map<string, string>>& oldMap,
             this->startState = currentState;
         }
     }
+
+    cout << "K";
 }

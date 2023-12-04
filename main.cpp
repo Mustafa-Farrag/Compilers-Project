@@ -10,7 +10,7 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-set<string>  set2;
+set<string> set2;
 
 void printClassTypeHelper(DFAState* state, set<string> &set) {
     if(set2.find(state->getId()) != set2.end()) return;
@@ -50,17 +50,17 @@ int main(){
     cout << "DFA transition Table size: " << dfaTransitionTable.size() <<endl;
 
     // minimize DFA
-    // MinimizeDFA* minimizeDFA = new MinimizeDFA();
+    MinimizeDFA* minimizeDFA = new MinimizeDFA();
     
-    // DFA* dfa = minimizeDFA->constructMinimizedDFATable(dfahandler);
+    DFA* dfa = minimizeDFA->constructMinimizedDFATable(dfahandler);
 
-    // set<string> set1;
+    set<string> set1;
 
-    // printClassTypeHelper(dfa->getStartState(), set1);
+    printClassTypeHelper(dfa->getStartState(), set1);
 
-    // Analyzer* analyzer = new Analyzer(dfa);
+    Analyzer* analyzer = new Analyzer(dfa);
 
-    // analyzer->analyze("test.txt");
-    
+    analyzer->analyze("test.txt");
+
     return 0;
 }

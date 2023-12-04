@@ -16,8 +16,6 @@ private:
         map<int, State*> getidStatesMap);
 
     map<string, int> getIndexOfGroupForMinimized(DFAHandler* dfahandler, set<string> transitions);
-    vector<vector<string>> separateStatesIntoGroups(map<string, int> &groupIndex);
-    vector<vector<string>> minimize(DFAHandler* dfahandler);
     void appendDataToFile(const map<string, map<string, string>>& data, const set<string>& horizontalHeaders, const string& filename);
     void printMinizedTableToFile(map<string, map<string, string>> minimizedTable, set<string> transitions);
 

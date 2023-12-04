@@ -25,7 +25,7 @@ DFAState* DFAState::getNextState(string input) {
     for (const auto& transition : transitions) {
         regex reg (transition.first);
 
-        if (regex_search(input, reg)){ // is regex_search or match
+        if (regex_match(input, reg)){
             return transition.second;
         }
     }

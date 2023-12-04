@@ -55,15 +55,17 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
 
          for (auto it = stateIndex.begin(); it != stateIndex.end(); ++it) {
             string state = it->first;
-            string group = "";
+            string group = to_string(it->second);
+            group += ",";
             map<string, string> stateTransition = DFATransitionTable[state];
             for (const auto& transition : transitions) {
                 auto nextState = stateTransition.find(transition);
                 if (nextState != stateTransition.end()) {
-                    group += stateIndex[nextState->second];
+                    group += to_string(stateIndex[nextState->second]);
                 }else{
-                    group += stateIndex[phiState];
+                    group += to_string(stateIndex[phiState]);
                 }
+                group += ",";
             }
             auto newGroupIndex = GroupIndex.find(group);
             if(newGroupIndex != GroupIndex.end()){
@@ -74,7 +76,6 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
                 GroupIndex[group] = newGroupIndex;
                 newIndex[state] = newGroupIndex;
             }
-
         }
         if(numOfGroups == set.size()) break;
         numOfGroups = set.size();
@@ -136,7 +137,7 @@ bool MinimizeDFA:: isStartState(string oldStartState, string state){
 }
 
 bool MinimizeDFA:: isAcceptanceState(string state){
-    if(oldclassType.find(state) != classType.end()){
+    if(oldclassType.find(state) != oldclassType.end()){
         return true;
     }
     return false;
@@ -151,6 +152,7 @@ DFA* MinimizeDFA::constructDFA(){
 DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
     string oldStartState = dfahandler->getStartState();
     oldclassType = dfahandler->getAcceptanceStateToClassType();
+
     set<string> k;
     for(auto a : oldclassType){
         k.insert(a.second);
@@ -163,11 +165,14 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
     map<string, map<string, string>> table;
     
     
-    cout << groupIndex.size() << " \n";
+    // cout << groupIndex.size() << " \n";
+    set<string> set;
     for (const auto pair : groupIndex) {
         string index = to_string(pair.second);
         string state = pair.first;
         auto entry = table.find(index);
+        set.insert(oldclassType[state]);
+        
         if(entry == table.end()){
             map<string, string> nextStates;
             map<string, string> stateTransition = DFATransitionTable[state];
@@ -186,7 +191,7 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
             startState = index;
         }
         if(isAcceptanceState(state)){
-            cout << oldclassType[state] << "  " << index << "\n";
+            // cout << oldclassType[state] << "  " << index << "\n";
             classType[index] = oldclassType[state];
         }
     }
