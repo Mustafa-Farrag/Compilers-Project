@@ -18,9 +18,6 @@ void DFA::convertMap(
     for (const auto& pair : oldMap) {
         string currentStateId = pair.first;
 
-        
-        set.insert(currentStateId);
-
         DFAState* currentState = nullptr;
 
         auto it = stateMap.find(currentStateId);
@@ -34,10 +31,15 @@ void DFA::convertMap(
                 currentState->setAccepting(true);
                 currentState->setId(currentStateId);
                 currentState->setClassType(temp->second);
+                set.insert(temp->second);
+            }else{
+                currentState->setAccepting(false);
             }
         }
         if(currentStateId == phistate){
             currentState->setIsPhi(true);
+        }else{
+            currentState->setIsPhi(false);
         }
 
         const auto& transitions = pair.second;
@@ -57,6 +59,10 @@ void DFA::convertMap(
                     nextState->setAccepting(true);
                     nextState->setId(nextStateId);
                     nextState->setClassType(temp->second);
+                    set.insert(temp->second);
+                }else{
+                    currentState->setAccepting(false);
+                    
                 }
             }
             currentState->setTransition(condition, nextState);

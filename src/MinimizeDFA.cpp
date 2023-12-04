@@ -1,7 +1,7 @@
 #include "../headers/MinimizeDFA.h"
 #include "../headers/DFAHandler.h"
-
 #include <iostream>
+#include <filesystem>
 using namespace std;
 
 /*
@@ -130,6 +130,7 @@ void MinimizeDFA::appendDataToFile(const map<string, map<string, string>>& data,
 
 void MinimizeDFA::printMinizedTableToFile(map<string, map<string, string>> minimizedTable, set<string> transitions){
     string filename = "MinimizedDFA.txt";
+   
     size_t halfSize = transitions.size() / 2;
     auto it = transitions.begin();
 
@@ -184,7 +185,7 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
         string index = to_string(pair.second);
         string state = pair.first;
         auto entry = table.find(index);
-        set.insert(oldclassType[state]);
+        
         
         if(entry == table.end()){
             map<string, string> nextStates;
@@ -206,6 +207,7 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
         }
         if(isAcceptanceState(state)){
             // cout << oldclassType[state] << "  " << index << "\n";
+            set.insert(oldclassType[state]);
             classType[index] = oldclassType[state];
         }
     }

@@ -85,9 +85,16 @@ map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable( map<
                 set<int> nextStatesidsTemp = get_ids(nextStates);
                 nextStatesids.insert(nextStatesidsTemp.begin(), nextStatesidsTemp.end());
 
-                vector<State*> nextStatesEps =  s->getEpsilonStates();
-                set<int> nextStatesidsEpsTemp = get_ids(nextStatesEps);
-                nextStatesids.insert(nextStatesidsEpsTemp.begin(), nextStatesidsEpsTemp.end());
+                // vector<State*> nextStatesEps =  s->getEpsilonStates();
+                // set<int> nextStatesidsEpsTemp = get_ids(nextStatesEps);
+                // nextStatesids.insert(nextStatesidsEpsTemp.begin(), nextStatesidsEpsTemp.end());
+                for (auto nextId: nextStatesidsTemp){
+                    State* nextS = idStatesMap2.at(nextId);
+
+                    vector<State*> nextStatesEps =  nextS->getEpsilonStates();
+                    set<int> nextStatesidsEpsTemp = get_ids(nextStatesEps);
+                    nextStatesids.insert(nextStatesidsEpsTemp.begin(), nextStatesidsEpsTemp.end());   
+                }
             }
             vector<int> tempVec(nextStatesids.begin(), nextStatesids.end());
             std::sort(tempVec.begin(), tempVec.end());
@@ -117,6 +124,11 @@ string DFAHandler :: getConcatenatedString(set<int> states){
     string type;
     for (auto id: states) {
         concatenatedString += to_string(id);
+        if(accept && idStatesMap2[id]->getIsAccept()){
+            if(idStatesMap2[id]->getClassType() != type){
+                cout << idStatesMap2[id]->getClassType() << "   " <<type<<"\n";
+            }
+        }
         if(idStatesMap2[id]->getIsAccept()){
             accept = true;
             type = idStatesMap2[id]->getClassType();
