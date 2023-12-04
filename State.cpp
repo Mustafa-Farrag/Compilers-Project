@@ -54,6 +54,10 @@ void State::setClassType(string type){
     classType = type;
 }
 
+string State::getClassType(){
+    return classType;
+}
+
 vector<Transition*> State::getTransitions(){
     return transitions;
 }

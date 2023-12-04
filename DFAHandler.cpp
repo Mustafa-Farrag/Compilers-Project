@@ -11,6 +11,16 @@ DFAHandler :: DFAHandler(map<int, State*> idStatesMap){
     map<string, set<int>> nStates_To_NStates; 
 }
 
+DFAHandler :: ~DFAHandler(){
+    for (auto& pair : idStatesMap2) {
+        delete pair.second; 
+    }
+    idStatesMap2.clear();  
+
+    nStates_To_NStates.clear();
+    DFATransitionTable.clear();
+    acceptanceStateToClassType.clear();
+}
 map<string, map<string, string>> DFAHandler::getDFATransitionTable(){
     return DFATransitionTable;
 }
@@ -19,7 +29,6 @@ map<string, map<string, string>> DFAHandler::getDFATransitionTable(){
 map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable(   map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
     map<string, map<string, string>> DFATransitionTable;
     // map<string, set<int>> sState_To_NStates;
-
 
     map<string, vector<int>> transStartState = NFATransistionTable.at(startState->getNum());
 
@@ -103,9 +112,26 @@ map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable(   ma
 
 string DFAHandler :: getConcatenatedString(set<int> states){
     string concatenatedString = "";
+    bool accept = false;
+    bool start = false;
+    string type;
     for (auto id: states) {
         concatenatedString += to_string(id);
+        if(idStatesMap2[id]->getIsAccept()){
+            accept = true;
+            type = idStatesMap2[id]->getClassType();
+        }
+        if(idStatesMap2[id]->getIsStart()){
+            start = true;
+        }
     }
+    if(accept){
+        acceptanceStateToClassType[concatenatedString] = type;
+    }
+    if(start){
+        startState = concatenatedString;
+    }
+    
     return concatenatedString;
 }
 
@@ -122,6 +148,14 @@ set<string> DFAHandler :: getAllInputs(set<int> states){
         }
     }
     return inputs;
+}
+
+map<string, string>  DFAHandler :: getAcceptanceStateToClassType(){
+    return acceptanceStateToClassType;
+}
+
+string DFAHandler :: getStartState(){
+    return startState;
 }
 
 set<int> DFAHandler :: get_ids(vector<State*> nextStates){
