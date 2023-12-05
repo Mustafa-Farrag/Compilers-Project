@@ -1,11 +1,8 @@
 .vscode
-Temp.cpp
-Temp.exe
-InputParser.exe
-a.exe
-NFAHandler.exe
-DFAHandler.exe
-Transition.exe
-NFA.exe
-ExpressionEvaluator.exe
+out
 main.exe
+DFAHandler.exe
+NFAHandler.exe
+NFA.exe
+DFA.exe
+Transition.exe

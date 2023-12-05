@@ -1,0 +1,39 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: g++.exe build active file",
+			"command": "C:\\msys64\\mingw64\\bin\\g++.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"src\\DFA.cpp",
+				"src\\DFAHandler.cpp",
+				"src\\DFAState.cpp",
+				"src\\ExpressionEvaluator.cpp",
+				"src\\InputParser.cpp",
+				"src\\MinimizeDFA.cpp",
+				"src\\NFA.cpp",
+                "src\\NFAHandler.cpp",
+                "src\\State.cpp",
+				"src\\Tokenizer.cpp",
+                "src\\Transition.cpp",
+                "main.cpp",
+				"-o",
+				"${workspaceFolder}\\out\\${fileBasenameNoExtension}.exe"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "compiler: C:\\msys64\\mingw64\\bin\\g++.exe"
+		}
+	]
+}
