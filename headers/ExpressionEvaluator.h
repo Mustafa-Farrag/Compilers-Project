@@ -19,5 +19,5 @@ private:
     NFA* evaluateRegExpression(string reg, string type);
     NFA* evaluatePostfix(string postfix);
     NFA* evaluateKeyword(string keyword);
-    NFA* evaluatePuncts(set<string> puncts);
+    NFA* evaluatePunct(string punct);
 };

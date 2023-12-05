@@ -194,15 +194,10 @@ NFA* ExpressionEvaluator :: evaluateKeyword(string keyword){
     return resultNFA;
 }
 
-NFA* ExpressionEvaluator :: evaluatePuncts(set<string> puncts){
-    vector<NFA*> nfas;
-
-    for (set<string>::iterator punct = puncts.begin(); punct != puncts.end(); ++punct) {
-        nfas.push_back(handler->createNFA(*punct+""));
-    }
-
-    NFA* resultNFA = handler->performUnionCombinationOneAccept(nfas);
-    resultNFA->getAcceptState()->setClassType("Punctuation");
+NFA* ExpressionEvaluator :: evaluatePunct(string punct){
+    
+    NFA* resultNFA = handler->createNFA(punct);
+    resultNFA->getAcceptState()->setClassType(punct);
 
     return resultNFA;
 }
@@ -219,7 +214,9 @@ NFA* ExpressionEvaluator :: computeCombinedNFA(map<string, string> rd, map<strin
         nfas.push_back(evaluateKeyword(*keyword));
     }
 
-    nfas.push_back(evaluatePuncts(puncts));
+    for (set<string>::iterator punct = puncts.begin(); punct != puncts.end(); ++punct) {
+        nfas.push_back(evaluatePunct(*punct));
+    }
 
     return handler->performUnionCombination(nfas);
 }

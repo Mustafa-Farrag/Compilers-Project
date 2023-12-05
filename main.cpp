@@ -6,7 +6,7 @@
 #include "headers/DFAHandler.h"
 #include "headers/ExpressionEvaluator.h"
 #include "headers/MinimizeDFA.h"
-#include "headers/Analyzer.h"
+#include "headers/Tokenizer.h"
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -25,7 +25,7 @@ void printClassTypeHelper(DFAState* state, set<string> &set) {
 
 int main(){
     // parse input file
-    InputParser ip("/home/gad/Compilers-Project/input.txt");
+    InputParser ip("input.txt");
     map<string, string> rd = ip.getRD();
     map<string, string> re = ip.getRE();
     set<string> keywords = ip.getKeywords();
@@ -58,9 +58,9 @@ int main(){
 
     printClassTypeHelper(dfa->getStartState(), set1);
 
-    Analyzer* analyzer = new Analyzer(dfa);
+    Tokenizer* tokenizer = new Tokenizer(dfa);
 
-    analyzer->analyze("/home/gad/Compilers-Project/test.txt");
+    tokenizer->tokenize("test.txt");
 
     return 0;
 }
