@@ -71,9 +71,13 @@ map<string, map<string, string>> DFAHandler :: getDFATransitionTable(   map<int,
                 set<int> nextStatesidsTemp = get_ids(nextStates);
                 nextStatesids.insert(nextStatesidsTemp.begin(), nextStatesidsTemp.end());
 
-                vector<State*> nextStatesEps =  s->getEpsilonStates();
-                set<int> nextStatesidsEpsTemp = get_ids(nextStatesEps);
-                nextStatesids.insert(nextStatesidsEpsTemp.begin(), nextStatesidsEpsTemp.end());
+                for (auto nextId: nextStatesidsTemp){
+                    State* nextS = idStatesMap2.at(nextId);
+
+                    vector<State*> nextStatesEps =  nextS->getEpsilonStates();
+                    set<int> nextStatesidsEpsTemp = get_ids(nextStatesEps);
+                    nextStatesids.insert(nextStatesidsEpsTemp.begin(), nextStatesidsEpsTemp.end());   
+                }
             }
             vector<int> tempVec(nextStatesids.begin(), nextStatesids.end());
             std::sort(tempVec.begin(), tempVec.end());
