@@ -36,6 +36,7 @@ void DFA::convertMap(
                 currentState->setAccepting(false);
             }
         }
+        
         if(currentStateId == phistate){
             currentState->setIsPhi(true);
         }else{

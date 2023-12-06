@@ -10,18 +10,6 @@
 #include <bits/stdc++.h>
 
 using namespace std;
-set<string> set2;
-
-void printClassTypeHelper(DFAState* state, set<string> &set) {
-    if(set2.find(state->getId()) != set2.end()) return;
-    set.insert(state->getClassType());
-    set2.insert(state->getId());
-    // Recursively iterate over transitions
-    for (const auto& transition : state->getTransitions()) {
-        printClassTypeHelper(transition.second, set);
-    }
-    return ;
-}
 
 int main(){
     // parse input file
@@ -53,10 +41,6 @@ int main(){
     MinimizeDFA* minimizeDFA = new MinimizeDFA();
     
     DFA* dfa = minimizeDFA->constructMinimizedDFATable(dfahandler);
-
-    set<string> set1;
-
-    printClassTypeHelper(dfa->getStartState(), set1);
 
     Tokenizer* tokenizer = new Tokenizer(dfa);
 

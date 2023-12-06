@@ -53,7 +53,7 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
     );
     
     string phiState = "phi";
-    stateIndex[phiState] = 0;
+    // stateIndex[phiState] = 0;
 
     int numOfGroups = 2;
 
@@ -73,7 +73,7 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
                 if (nextState != stateTransition.end()) {
                     group += to_string(stateIndex[nextState->second]);
                 }else{
-                    group += to_string(stateIndex[phiState]);
+                    group += phiState;
                 }
                 group += ",";
             }
@@ -102,7 +102,7 @@ void MinimizeDFA::appendDataToFile(const map<string, map<string, string>>& data,
         return;
     }
 
-    const int columnWidth = 6; 
+    const int columnWidth = 10; 
 
     outputFile << setw(columnWidth / 2) << "" << setw(columnWidth - columnWidth / 2) << "";
 
@@ -164,22 +164,13 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
     string oldStartState = dfahandler->getStartState();
     oldclassType = dfahandler->getAcceptanceStateToClassType();
 
-    set<string> k;
-    for(auto a : oldclassType){
-        k.insert(a.second);
-    }
-    
-
     map<string, map<string, string>> DFATransitionTable = dfahandler->getDFATransitionTable();
     set<string> transitions = formTransitions(DFATransitionTable);
     map<string, int> groupIndex = getIndexOfGroupForMinimized(dfahandler, transitions);
     map<string, map<string, string>> table;
     
     
-    // cout << groupIndex.size() << " \n";
-    set<string> set;
-
-    phiState = to_string(groupIndex["phi"]);
+    // phiState = to_string(groupIndex["phi"]);
 
     for (const auto pair : groupIndex) {
         string index = to_string(pair.second);
@@ -195,19 +186,22 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
                 if (nextState != stateTransition.end()) {
                     string nextstate = nextState->second;
                     nextStates[transition] = to_string(groupIndex[nextstate]);
-                }else{
-                    nextStates[transition] = to_string(groupIndex["phi"]);
                 }
+                // else{
+                //     nextStates[transition] = to_string(groupIndex["phi"]);
+                // }
             }
             table[index] = nextStates;
         }
-        
+
+        if(state == ""){
+            phiState = index;
+        }
+
         if(isStartState(oldStartState, state)){
             startState = index;
         }
         if(isAcceptanceState(state)){
-            // cout << oldclassType[state] << "  " << index << "\n";
-            set.insert(oldclassType[state]);
             classType[index] = oldclassType[state];
         }
     }
