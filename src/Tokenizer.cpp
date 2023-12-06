@@ -33,17 +33,15 @@ void Tokenizer::tokenize(string inputPath) {
         string acceptanceType = "";
         int acceptanceIndex = -1;
 
-        if(inputString[i] == ' '){
-            continue;
-        }
-
+        currentState = currentState->getNextState(string(1, inputString[i]));
         while(!currentState->getIsPhi() && i<inputString.length()){
-            currentState = currentState->getNextState(string(1, inputString[i]));
             if(currentState->getIsAccepting()){
                 acceptanceType = currentState->getClassType();
                 acceptanceIndex = i;
             }
+
             i++;
+            currentState = currentState->getNextState(string(1, inputString[i]));
         }
 
         if(acceptanceIndex == -1){

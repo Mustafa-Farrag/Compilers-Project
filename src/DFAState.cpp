@@ -37,8 +37,10 @@ DFAState* DFAState::getNextState(string input) {
             return transition.second;
         }
     }
-
-    return nullptr; // If no transition exists for the input symbol
+    
+    DFAState* phi = new DFAState("phi");
+    phi->setIsPhi(true);
+    return phi;
 }
 
 bool DFAState::getIsAccepting(){
