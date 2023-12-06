@@ -33,6 +33,8 @@ void Tokenizer::tokenize(string inputPath) {
         string acceptanceType = "";
         int acceptanceIndex = -1;
 
+        if(inputString[i]==' ' || inputString[i]=='\n') continue;
+
         currentState = currentState->getNextState(string(1, inputString[i]));
         while(!currentState->getIsPhi() && i<inputString.length()){
             if(currentState->getIsAccepting()){
@@ -45,7 +47,7 @@ void Tokenizer::tokenize(string inputPath) {
         }
 
         if(acceptanceIndex == -1){
-            cerr << "unrecognized token" << endl;
+            outputString += "unrecognized token\n";
             continue;
         }
 
