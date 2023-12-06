@@ -9,6 +9,7 @@
 DFAHandler :: DFAHandler(map<int, State*> idStatesMap){
     idStatesMap2 = idStatesMap;
     map<string, set<int>> nStates_To_NStates; 
+    nfaHandler = new NFAHandler();
 }
 
 // DFAHandler :: ~DFAHandler(){
@@ -29,6 +30,8 @@ map<string, map<string, string>> DFAHandler::getDFATransitionTable(){
 map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable( map<int, map<string, vector<int>>> NFATransistionTable, State* startState){
     map<string, map<string, string>> DFATransitionTable;
     // map<string, set<int>> sState_To_NStates;
+
+    set<string> inputs = nfaHandler->getAllConditions(startState);
 
     map<string, vector<int>> transStartState = NFATransistionTable.at(startState->getNum());
 
@@ -65,7 +68,7 @@ map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable( map<
         doneStates.insert(getConcatenatedString(curr));
 
 
-        set<string> inputs = getAllInputs(curr);
+        // set<string> inputs = getAllInputs(curr);
         // cout<<"iam here2"<<endl;
 
 
@@ -112,7 +115,7 @@ map<string, map<string, string>> DFAHandler :: ConstructDFATransitionTable( map<
     }
 
     this->DFATransitionTable = DFATransitionTable;
-    processDFATableInputs();
+    // processDFATableInputs();
 
     return this->DFATransitionTable;
 }
@@ -199,6 +202,7 @@ string DFAHandler :: getConcatenatedString(set<int> states){
     return concatenatedString;
 }
 
+// needs to commented
 set<string> DFAHandler :: getAllInputs(set<int> states){
     set<string> inputs;
     for(auto id: states) {

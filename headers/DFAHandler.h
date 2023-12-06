@@ -2,10 +2,12 @@
 
 #include <bits/stdc++.h>
 #include "State.h"
+#include "NFAHandler.h"
 using namespace std;
 
 class DFAHandler {
 private:
+    NFAHandler* nfaHandler;
     map<int, State*> idStatesMap2;
     map<string, set<int>> nStates_To_NStates;
     map<string, map<string, string>> DFATransitionTable;

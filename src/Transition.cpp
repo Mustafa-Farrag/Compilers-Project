@@ -28,8 +28,8 @@ State* Transition::applyInput(string in){
     if(conditionStr == "[\\L]" || conditionStr == in){
         return nextState;
     }
-    
-    if (regex_match(in, condition)) {
+
+    if (regex_search(in, condition)) {
         return nextState;
     } else {
         return nullptr;

@@ -19,4 +19,5 @@ public:
     NFA* performUnionCombinationOneAccept(vector<NFA*> nfas);
     map<int, map<string, vector<int>>> getTransitionTable(State* startState);
     map<int, State*> getIdStateMap(State* startState);
+    set<string> getAllConditions(State* startState);
 };

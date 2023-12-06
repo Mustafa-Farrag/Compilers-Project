@@ -206,7 +206,69 @@ map<int, State*> NFAHandler :: getIdStateMap(State* startState){
     return idStateMap;
 }
 
- NFA* NFAHandler::createNFA(string condition){
+NFA* NFAHandler::createNFA(string condition){
     return new NFA(condition, &counter);
- }
- 
+}
+
+set<string> NFAHandler::getAllConditions(State* startState){
+    set<string> conditions;
+    queue<State*> statesQueue;
+    set<int> doneStates;
+
+    for(auto trans: startState->getTransitions()){
+        conditions.insert(trans->getConditionStr());
+        State* nextS = trans->applyInput(trans->getConditionStr());
+        statesQueue.push(nextS);
+    }
+
+    for(auto trans: startState->getEpsilonTransitions()){
+        State* nextS = trans->applyInput("");
+        statesQueue.push(nextS);
+    }
+
+    doneStates.insert(startState->getNum());
+
+    while(!statesQueue.empty()){
+        State* state = statesQueue.front();
+        statesQueue.pop();
+
+        if(doneStates.find(state->getNum()) != doneStates.end()){
+            continue;
+        }
+
+        doneStates.insert(state->getNum());
+
+        for(auto trans: state->getTransitions()){
+            conditions.insert(trans->getConditionStr());
+            State* nextS = trans->applyInput(trans->getConditionStr());
+            statesQueue.push(nextS);
+        }
+
+        for(auto trans: state->getEpsilonTransitions()){
+            State* nextS = trans->applyInput("");
+            statesQueue.push(nextS);
+        }
+    }
+    set<string> newConds;
+    regex re("\\[.-.\\]");
+    for(auto &cond: conditions){
+        if(!regex_match(cond, re)){
+            newConds.insert(cond);
+            continue;
+        }
+        string temp = "";
+        for(auto &cond2: conditions){
+            if(regex_match(cond2.substr(1, cond2.length()-2), regex(cond))){
+                temp += cond2[1];
+            }
+        }
+        if(temp != ""){
+            string newCond = "(?![" + temp + "])" + cond;
+            newConds.insert(newCond);
+        }else{
+            newConds.insert(cond);
+        }
+    }
+
+    return newConds;
+}
