@@ -9,7 +9,6 @@ private:
     set<string> keywords;
     set<string> punctuations;
 
-    vector<string> split_str(string s, string del);
     void parse(string inputFilePath);
 
 public:

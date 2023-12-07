@@ -1,14 +1,23 @@
 #include "../headers/InputParser.h"
 
-vector<string> InputParser::split_str(string s, string del) {
-    int end = s.find(del);
-    vector<string> strs;
+vector<string> splitStrBySpace(string s) {
+    regex startSpace("^\\s");
+    regex endSpace("\\s$");
+    regex spaces("\\s+");
+    
+    s = regex_replace(s, spaces, " ");
+    s = regex_replace(s, startSpace, "");
+    s = regex_replace(s, endSpace, "");
+
+    int end = s.find(" ");
+    vector<std::string> strs;
     while (end != -1) {
         strs.push_back(s.substr(0, end));
         s.erase(s.begin(), s.begin() + end + 1);
-        end = s.find(del);
+        end = s.find(" ");
     }
     strs.push_back(s.substr(0, end));
+
     return strs;
 }
 
@@ -22,7 +31,7 @@ void InputParser::parse(string inputFilePath){
     string line;
     
     while (getline(inputFile, line)) {
-        line = regex_replace(line, regex("\\\\(?![L+*^])"), "");
+        line = regex_replace(line, regex("\\\\(?![L+|*^])"), "");
         line = regex_replace(line, regex("\\^"), "\\^");
 
         if(line[0] == '{'){ // Keyword Line
@@ -40,7 +49,7 @@ void InputParser::parse(string inputFilePath){
         if(line[0] == '['){ // Punctuations Line
             line = line.substr(1, line.size()-2);
 
-            vector<string> strs = split_str(line, " ");
+            vector<string> strs = splitStrBySpace(line);
             for(auto str: strs){
                 punctuations.insert(str);
             }
