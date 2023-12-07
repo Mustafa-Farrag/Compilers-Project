@@ -22,12 +22,15 @@ public:
     State(State* other, map<State*, State*>* stateGetter, int* counter);
     bool getIsStart();
     bool getIsAccept();
+    int getNum();
     void setIsStart(bool state);
     void setIsAccept(bool state);
     void setClassType(string type);
+    string getClassType();
     vector<Transition*> getTransitions();
     vector<Transition*> getEpsilonTransitions();
     vector<State*> getEpsilonStates();
+    // vector<State*> State::getNonEpsilonStates();
     void addTransition(Transition* trans);
     vector<State*> applyInput(string in);
 };

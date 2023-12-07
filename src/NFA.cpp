@@ -1,4 +1,4 @@
-#include "headers/NFA.h"
+#include "../headers/NFA.h"
 
 NFA::NFA(string condition, int* counter){
     startState = new State((*counter)++, true, false);

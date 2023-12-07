@@ -1,5 +1,5 @@
-#include "headers/Transition.h"
-#include "headers/State.h"
+#include "../headers/Transition.h"
+#include "../headers/State.h"
 
 Transition::Transition(string in, State* nState){
     conditionStr = "[" + in + "]";
@@ -25,11 +25,20 @@ string Transition::getConditionStr(){
 }
 
 State* Transition::applyInput(string in){
-    if(conditionStr == "[\\L]"){
+    bool isContainingRange;
+
+    if(conditionStr.length() != 3){
+        isContainingRange = 
+        regex_match(in, regex("\\(\\?\\!.+\\)\\"+conditionStr.substr(0, conditionStr.length()-1)+"\\]"));
+    }else{
+        isContainingRange = false;
+    }
+
+    if(conditionStr == "[\\L]" || conditionStr == in || isContainingRange){
         return nextState;
     }
     
-    if (regex_match(in, condition)) {
+    if (regex_match(in.substr(1, in.length()-2), condition)) {
         return nextState;
     } else {
         return nullptr;

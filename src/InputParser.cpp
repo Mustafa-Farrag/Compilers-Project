@@ -1,4 +1,4 @@
-#include "headers/InputParser.h"
+#include "../headers/InputParser.h"
 
 vector<string> InputParser::split_str(string s, string del) {
     int end = s.find(del);

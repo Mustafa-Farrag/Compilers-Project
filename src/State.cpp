@@ -1,10 +1,11 @@
-#include "headers/State.h"
-#include "headers/Transition.h"
+#include "../headers/State.h"
+#include "../headers/Transition.h"
 
 State::State(int n){
     num = n;
     isStart = false;
     isAccept = false;
+    classType = "";
 }
 
 State::State(int n, bool start, bool accept){
@@ -36,6 +37,10 @@ bool State::getIsAccept(){
     return isAccept;
 }
 
+int State::getNum(){
+    return num;
+}
+
 void State::setIsStart(bool state){
     isStart = state;
 }
@@ -46,6 +51,10 @@ void State::setIsAccept(bool state){
 
 void State::setClassType(string type){
     classType = type;
+}
+
+string State::getClassType(){
+    return classType;
 }
 
 vector<Transition*> State::getTransitions(){
@@ -91,7 +100,9 @@ vector<State*> State::applyInput(string in){
     vector<State*> nextStates;
     for(auto transition:transitions){
         State* nextSt = transition->applyInput(in);
-        if(nextSt != nullptr) nextStates.push_back(nextSt);
+        if(nextSt != nullptr){
+             nextStates.push_back(nextSt);
+        }
     }
     return nextStates;
 }
