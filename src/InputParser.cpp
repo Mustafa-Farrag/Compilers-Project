@@ -35,12 +35,11 @@ void InputParser::parse(string inputFilePath){
         line = regex_replace(line, regex("\\^"), "\\^");
 
         if(line[0] == '{'){ // Keyword Line
-            regex re("[a-zA-Z]+"); // Keywords
-            smatch match;
+            line = line.substr(1, line.size()-2);
 
-            while (regex_search(line, match, re)) {
-                keywords.insert(match[0]);
-                line = match.suffix();
+            vector<string> strs = splitStrBySpace(line);
+            for(auto str: strs){
+                keywords.insert(str);
             }
 
             continue;
