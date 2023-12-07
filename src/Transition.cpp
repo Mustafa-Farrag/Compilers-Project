@@ -25,11 +25,20 @@ string Transition::getConditionStr(){
 }
 
 State* Transition::applyInput(string in){
-    if(conditionStr == "[\\L]" || conditionStr == in){
-        return nextState;
+    bool isContainingRange;
+
+    if(conditionStr.length() != 3){
+        isContainingRange = 
+        regex_match(in, regex("\\(\\?\\!.+\\)\\"+conditionStr.substr(0, conditionStr.length()-1)+"\\]"));
+    }else{
+        isContainingRange = false;
     }
 
-    if (regex_search(in, condition)) {
+    if(conditionStr == "[\\L]" || conditionStr == in || isContainingRange){
+        return nextState;
+    }
+    
+    if (regex_match(in.substr(1, in.length()-2), condition)) {
         return nextState;
     } else {
         return nullptr;

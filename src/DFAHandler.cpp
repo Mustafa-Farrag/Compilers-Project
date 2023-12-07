@@ -180,11 +180,11 @@ string DFAHandler :: getConcatenatedString(set<int> states){
     string type;
     for (auto id: states) {
         concatenatedString += to_string(id);
-        if(accept && idStatesMap2[id]->getIsAccept()){
-            if(idStatesMap2[id]->getClassType() != type){
-                cout << idStatesMap2[id]->getClassType() << "   " <<type<<"\n";
-            }
-        }
+        // if(accept && idStatesMap2[id]->getIsAccept()){
+        //     if(idStatesMap2[id]->getClassType() != type){
+        //         cout << idStatesMap2[id]->getClassType() << "   " <<type<<"\n";
+        //     }
+        // }
         if(idStatesMap2[id]->getIsAccept()){
             accept = true;
             type = idStatesMap2[id]->getClassType();

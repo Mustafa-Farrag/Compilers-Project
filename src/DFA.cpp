@@ -62,8 +62,7 @@ void DFA::convertMap(
                     nextState->setClassType(temp->second);
                     set.insert(temp->second);
                 }else{
-                    currentState->setAccepting(false);
-                    
+                    nextState->setAccepting(false);
                 }
             }
             currentState->setTransition(condition, nextState);
@@ -73,6 +72,4 @@ void DFA::convertMap(
             this->startState = currentState;
         }
     }
-
-    cout << "K";
 }

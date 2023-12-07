@@ -32,7 +32,10 @@ void Tokenizer::tokenize(string inputPath) {
         
         string acceptanceType = "";
         int acceptanceIndex = -1;
-
+        int startIdx = i;
+        if(inputString[i]=='?'){
+            cout << "";
+        }
         if(inputString[i]==' ' || inputString[i]=='\n') continue;
 
         currentState = currentState->getNextState(string(1, inputString[i]));
@@ -47,7 +50,8 @@ void Tokenizer::tokenize(string inputPath) {
         }
 
         if(acceptanceIndex == -1){
-            outputString += "unrecognized token\n";
+            outputString += "unrecognized token: " + string(1, inputString[startIdx]) + "\n";
+            i = startIdx;
             continue;
         }
 

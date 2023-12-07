@@ -1,8 +1,3 @@
 .vscode
 out
-main.exe
-DFAHandler.exe
-NFAHandler.exe
-NFA.exe
-DFA.exe
-Transition.exe
+main

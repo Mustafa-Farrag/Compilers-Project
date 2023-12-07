@@ -95,7 +95,7 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
 }
 
 void MinimizeDFA::appendDataToFile(const map<string, map<string, string>>& data, const set<string>& horizontalHeaders, const string& filename) {
-    ofstream outputFile(filename, ios::app);
+    ofstream outputFile(filename, ios::trunc);
 
     if (!outputFile.is_open()) {
         cerr << "Unable to open file!" << endl;
