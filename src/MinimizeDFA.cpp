@@ -18,7 +18,7 @@ map<string, int> MinimizeDFA:: separateNonAcceptAndAcceptStates(
     for (auto it = nStates_To_NStates.begin(); it != nStates_To_NStates.end(); ++it) {
         string state = it->first;
         if(isAcceptanceState(state)){
-            auto existingIndex = acceptTypeIndex.find(state);
+            auto existingIndex = acceptTypeIndex.find(oldclassType[state]);
             if(existingIndex != acceptTypeIndex.end()){
                 index[state] = existingIndex->second;
                 acceptTypeIndex[oldclassType[state]] = existingIndex->second;
@@ -211,6 +211,7 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
         }
     }
     minimizedTable = table;
+    cout << minimizedTable.size() << "\n";
     printMinizedTableToFile(minimizedTable, transitions);
     return constructDFA();
 }
