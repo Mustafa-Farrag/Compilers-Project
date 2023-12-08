@@ -32,7 +32,6 @@ void InputParser::parse(string inputFilePath){
     
     while (getline(inputFile, line)) {
         line = regex_replace(line, regex("\\\\(?![L+|*^])"), "");
-        line = regex_replace(line, regex("\\^"), "\\^");
 
         if(line[0] == '{'){ // Keyword Line
             line = line.substr(1, line.size()-2);

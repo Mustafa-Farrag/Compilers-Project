@@ -39,8 +39,9 @@ int main(){
 
     // minimize DFA
     MinimizeDFA* minimizeDFA = new MinimizeDFA();
-    
     DFA* dfa = minimizeDFA->constructMinimizedDFATable(dfahandler);
+
+    cout << "minimized DFA transition Table size: " << minimizeDFA->getMinimizedTable().size()<< "\n";
 
     Tokenizer* tokenizer = new Tokenizer(dfa);
 

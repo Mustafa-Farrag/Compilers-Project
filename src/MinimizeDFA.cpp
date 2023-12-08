@@ -211,7 +211,7 @@ DFA* MinimizeDFA::constructMinimizedDFATable(DFAHandler* dfahandler){
         }
     }
     minimizedTable = table;
-    cout << minimizedTable.size() << "\n";
+    
     printMinizedTableToFile(minimizedTable, transitions);
     return constructDFA();
 }
