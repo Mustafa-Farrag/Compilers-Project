@@ -33,9 +33,7 @@ void Tokenizer::tokenize(string inputPath) {
         string acceptanceType = "";
         int acceptanceIndex = -1;
         int startIdx = i;
-        if(inputString[i]=='?'){
-            cout << "";
-        }
+        
         if(inputString[i]==' ' || inputString[i]=='\n') continue;
 
         currentState = currentState->getNextState(string(1, inputString[i]));

@@ -95,14 +95,15 @@ map<string, int> MinimizeDFA::getIndexOfGroupForMinimized(DFAHandler* dfahandler
 }
 
 void MinimizeDFA::appendDataToFile(const map<string, map<string, string>>& data, const set<string>& horizontalHeaders, const string& filename) {
-    ofstream outputFile(filename, ios::trunc);
+
+    ofstream outputFile(filename, ios::app);
 
     if (!outputFile.is_open()) {
         cerr << "Unable to open file!" << endl;
         return;
     }
 
-    const int columnWidth = 10; 
+    const int columnWidth = 35; 
 
     outputFile << setw(columnWidth / 2) << "" << setw(columnWidth - columnWidth / 2) << "";
 
@@ -138,6 +139,10 @@ void MinimizeDFA::printMinizedTableToFile(map<string, map<string, string>> minim
 
     std::set<std::string> firstHalf(transitions.begin(), it);
     std::set<std::string> secondHalf(it, transitions.end());
+
+    if (filesystem::exists(filename)) {
+        filesystem::remove(filename);
+    }
 
     appendDataToFile(minimizedTable, firstHalf, filename);
     appendDataToFile(minimizedTable, secondHalf, filename);
