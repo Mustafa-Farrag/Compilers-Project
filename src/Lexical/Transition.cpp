@@ -1,5 +1,5 @@
-#include "../headers/Transition.h"
-#include "../headers/State.h"
+#include "Lexical/Transition.h"
+#include "Lexical/State.h"
 
 Transition::Transition(string in, State* nState){
     conditionStr = "[" + in + "]";

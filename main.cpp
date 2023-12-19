@@ -1,19 +1,19 @@
-#include "headers/InputParser.h"
-#include "headers/NFA.h"
-#include "headers/State.h"
-#include "headers/Transition.h"
-#include "headers/NFAHandler.h"
-#include "headers/DFAHandler.h"
-#include "headers/ExpressionEvaluator.h"
-#include "headers/MinimizeDFA.h"
-#include "headers/Tokenizer.h"
+#include "Lexical/InputParser.h"
+#include "Lexical/NFA.h"
+#include "Lexical/State.h"
+#include "Lexical/Transition.h"
+#include "Lexical/NFAHandler.h"
+#include "Lexical/DFAHandler.h"
+#include "Lexical/ExpressionEvaluator.h"
+#include "Lexical/MinimizeDFA.h"
+#include "Lexical/Tokenizer.h"
 #include <bits/stdc++.h>
 
 using namespace std;
 
 int main(){
     // parse input file
-    InputParser ip("input.txt");
+    InputParser ip("Files/tokens_rules.txt");
     map<string, string> rd = ip.getRD();
     map<string, string> re = ip.getRE();
     set<string> keywords = ip.getKeywords();
@@ -45,7 +45,7 @@ int main(){
 
     Tokenizer* tokenizer = new Tokenizer(dfa);
 
-    tokenizer->tokenize("test.txt");
+    tokenizer->tokenize("Files/tokens_test.txt");
 
     return 0;
 }

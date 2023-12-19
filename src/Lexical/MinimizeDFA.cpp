@@ -1,5 +1,5 @@
-#include "../headers/MinimizeDFA.h"
-#include "../headers/DFAHandler.h"
+#include "Lexical/MinimizeDFA.h"
+#include "Lexical/DFAHandler.h"
 #include <iostream>
 #include <filesystem>
 using namespace std;
@@ -130,7 +130,7 @@ void MinimizeDFA::appendDataToFile(const map<string, map<string, string>>& data,
 }
 
 void MinimizeDFA::printMinizedTableToFile(map<string, map<string, string>> minimizedTable, set<string> transitions){
-    string filename = "MinimizedDFA.txt";
+    string filename = "Files/MinimizedDFA.txt";
    
     size_t halfSize = transitions.size() / 2;
     auto it = transitions.begin();

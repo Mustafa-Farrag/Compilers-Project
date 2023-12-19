@@ -1,7 +1,7 @@
-#include "../headers/DFAHandler.h"
-#include "../headers/NFA.h"
-#include "../headers/State.h"
-#include "../headers/Transition.h"
+#include "Lexical/DFAHandler.h"
+#include "Lexical/NFA.h"
+#include "Lexical/State.h"
+#include "Lexical/Transition.h"
 #include <vector>
 #include <map>
 #include <stack>

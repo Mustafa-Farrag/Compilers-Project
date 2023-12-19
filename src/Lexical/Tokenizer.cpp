@@ -1,4 +1,4 @@
-#include "../headers/Tokenizer.h"
+#include "Lexical/Tokenizer.h"
 #include <filesystem>
 
 Tokenizer:: Tokenizer (DFA* dfa){

@@ -1,7 +1,7 @@
-#include "../headers/NFAHandler.h"
-#include "../headers/NFA.h"
-#include "../headers/State.h"
-#include "../headers/Transition.h"
+#include "Lexical/NFAHandler.h"
+#include "Lexical/NFA.h"
+#include "Lexical/State.h"
+#include "Lexical/Transition.h"
 
 NFAHandler :: NFAHandler(){ counter = 0; }
 

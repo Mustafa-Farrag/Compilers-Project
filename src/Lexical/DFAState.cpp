@@ -1,4 +1,4 @@
-#include "../headers/DFAState.h"
+#include "Lexical/DFAState.h"
 
 DFAState::DFAState(string id, bool isAccepting, string classType){
     this->id = id;

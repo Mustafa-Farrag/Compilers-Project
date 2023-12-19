@@ -1,5 +1,5 @@
-#include "../headers/State.h"
-#include "../headers/Transition.h"
+#include "Lexical/State.h"
+#include "Lexical/Transition.h"
 
 State::State(int n){
     num = n;

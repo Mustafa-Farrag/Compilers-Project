@@ -1,4 +1,4 @@
-#include "../headers/DFA.h"
+#include "Lexical/DFA.h"
 
 DFA::DFA() : startState(nullptr) {}
 

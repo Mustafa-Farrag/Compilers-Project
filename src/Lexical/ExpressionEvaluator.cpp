@@ -1,6 +1,6 @@
-#include "../headers/ExpressionEvaluator.h"
-#include "../headers/NFA.h"
-#include "../headers/NFAHandler.h"
+#include "Lexical/ExpressionEvaluator.h"
+#include "Lexical/NFA.h"
+#include "Lexical/NFAHandler.h"
 
 ExpressionEvaluator :: ExpressionEvaluator(){
     handler = new NFAHandler();

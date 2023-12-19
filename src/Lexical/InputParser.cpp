@@ -1,4 +1,4 @@
-#include "../headers/InputParser.h"
+#include "Lexical/InputParser.h"
 
 vector<string> splitStrBySpace(string s) {
     regex startSpace("^\\s");
