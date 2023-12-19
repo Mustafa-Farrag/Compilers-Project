@@ -10,6 +10,7 @@
 				"-g",
 				"-I${workspaceFolder}/headers",
 				"src\\Lexical\\*.cpp",
+				"src\\Syntax\\*.cpp",
                 "main.cpp",
 				"-o",
 				"${workspaceFolder}\\out\\${fileBasenameNoExtension}.exe"
