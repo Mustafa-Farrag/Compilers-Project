@@ -14,6 +14,7 @@ private:
     void computeFirstSet();
     set<string> computeNonTerminalFirstSet(CFGElement* nonTerminal);
     void computeFollowSet();
+    set<string> computeNonTerminalFollowSet(CFGElement* nonTerminal);
 
 public:
     CFGFirstFollowEvaluator(CFGElement* start, map<string, CFGElement*> elements);
