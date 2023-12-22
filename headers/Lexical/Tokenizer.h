@@ -6,8 +6,11 @@ using namespace std;
 class Tokenizer{
 private:
     DFA* dfa;
+    int currTokenIndx;
+    vector<string> tokens;
 
 public:
-    Tokenizer(DFA* dfa);
+    Tokenizer(DFA* dfa, string inputPath);
     void tokenize (string filepath);
+    string getNextToken();
 };

@@ -1,15 +1,13 @@
 #include "Lexical/Tokenizer.h"
 #include <filesystem>
 
-Tokenizer:: Tokenizer (DFA* dfa){
+Tokenizer:: Tokenizer (DFA* dfa, string inputPath){
     this->dfa = dfa;
+    this->currTokenIndx = 0;
+    tokenize(inputPath);
 }
 
 void Tokenizer::tokenize(string inputPath) {
-    filesystem::path filePath(inputPath);
-    filesystem::path parentPath = filePath.parent_path();
-    filesystem::path outputPath = parentPath / "tokens.txt";
-
     ifstream inputFile(inputPath);
     
     if (!inputFile.is_open()) {
@@ -18,7 +16,7 @@ void Tokenizer::tokenize(string inputPath) {
     }
 
     char character;
-    string inputString = "", outputString = "";
+    string inputString = "";
 
     while (inputFile.get(character)){
         inputString += character;
@@ -48,23 +46,17 @@ void Tokenizer::tokenize(string inputPath) {
         }
 
         if(acceptanceIndex == -1){
-            outputString += "unrecognized token: " + string(1, inputString[startIdx]) + "\n";
+            cerr << "unrecognized token: " << string(1, inputString[startIdx]) << endl;
             i = startIdx;
             continue;
         }
 
-        outputString += acceptanceType + '\n';
+        tokens.push_back(acceptanceType);
         i = acceptanceIndex;
     }
-    
-    ofstream outputFile(outputPath, ios::trunc);
+}
 
-    if (outputFile.is_open()){
-        outputFile << outputString << endl;
-    } else {
-        cerr << "Unable to write file!" << endl;
-    }
-
-    outputFile.close();
-
+ string Tokenizer::getNextToken(){
+    if(currTokenIndx >= tokens.size()) return "";
+    return tokens[currTokenIndx++];
 }

@@ -23,6 +23,8 @@ void CFGInputParser::constructProdsList(){
             if(str == "|"){
                 element->pushProduction();
             }else{
+                if(str[0] == '\'') str = str.substr(1, str.length()-2);
+
                 if(cfg.find(str) != cfg.end()){
                     element->pushElement(cfg[str]);
                 }else{
