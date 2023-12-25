@@ -3,13 +3,14 @@
 #include <bits/stdc++.h>
 #include "CFGElement.h"
 #include "../Lexical/Tokenizer.h"
-
+#include <iostream>
+#include <stack>
 
 using namespace std;
 
 class Tracer{
 private:
-    map<string, map<string, vector<string>>> parserTable ;
+    map<string, map<string, vector<string>>> parserTable;
     map<string, CFGElement*> elements;
     Tokenizer* tokenizer;
     CFGElement* start;

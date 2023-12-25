@@ -57,6 +57,6 @@ void Tokenizer::tokenize(string inputPath) {
 }
 
  string Tokenizer::getNextToken(){
-    if(currTokenIndx >= tokens.size()) return "";
+    if(currTokenIndx >= tokens.size()) return "$";
     return tokens[currTokenIndx++];
 }

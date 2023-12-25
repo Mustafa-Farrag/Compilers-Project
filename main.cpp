@@ -52,7 +52,7 @@ int main(){
     CFGParserHandler parserHandler(cfgffe);
     map<string, map<string, vector<string>>> parserTable = parserHandler.getParserTable();
 
-    cout << "Hi";
+    cout << "Hi\n";
 
     Tracer* tracer = new Tracer(start, parserTable, elements, tokenizer);
     tracer->trace();
