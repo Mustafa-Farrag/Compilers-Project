@@ -8,22 +8,27 @@ Tracer::Tracer(CFGElement* start, map<string, map<string, vector<string>>> parse
     this->tokenizer = tokenizer;
 }
 
-void printStack(stack<CFGElement*> s) {
+void printStack(stack<CFGElement*> s, ofstream& outputFile ) {
+    string st = "";
     while (!s.empty()) {
-        cout << s.top()->getName() << " ";
+        st += s.top()->getName();
+        st += " ";
         s.pop();
     }
-    cout << "\n";
+    st += "\n";
+    outputFile << st;
 }
 
 
 void Tracer::trace(){
+    ofstream outputFile("Files/Tracer Productions.txt");  
+
     stack<CFGElement*> stack;
 
     stack.push(new CFGElement("$", true));
     stack.push(start);
 
-    // printStack(stack);
+    printStack(stack, outputFile);
 
     string currtoken = tokenizer->getNextToken();
     while(!stack.empty()){
@@ -39,7 +44,7 @@ void Tracer::trace(){
             else{
                 cout << "Error: missing " << currtoken << ", inserted \n";
             }
-            // printStack(stack);
+            printStack(stack, outputFile);
             currtoken = tokenizer->getNextToken();
             continue;
         }
@@ -53,13 +58,13 @@ void Tracer::trace(){
 
         }else if(production[0] == "sync"){
             cout << "sync\n";
-            // printStack(stack);
+            printStack(stack, outputFile);
             continue;
         }else{
             for (auto it = production.rbegin(); it != production.rend(); ++it) {
                 stack.push(elements[*it]);
             }
-            // printStack(stack);
+            printStack(stack, outputFile);
         }
     }
     if(stack.empty()){
