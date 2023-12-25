@@ -48,14 +48,10 @@ int main(){
     CFGInputParser cfgParser("Files/LLgrammar.txt");
     map<string, CFGElement*> elements = cfgParser.getCFGElements();
     CFGElement* start = cfgParser.getStartSymbol();
-    CFGFirstFollowEvaluator* cfgffe = new CFGFirstFollowEvaluator(start, elements);
-    map<CFGElement*, set<string>> firstSet = cfgffe->getFirstSet();
-    map<CFGElement*, set<string>> followSet = cfgffe->getFollowSet();
 
     //parser table test
-    CFGParserHandler parserHandler(cfgffe);
+    CFGParserHandler parserHandler(new CFGFirstFollowEvaluator(start, elements));
     map<string, map<string, vector<string>>> parserTable = parserHandler.getParserTable();
-
 
     Tracer* tracer = new Tracer(start, parserTable, elements, tokenizer);
     tracer->trace();

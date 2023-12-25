@@ -7,11 +7,12 @@ using namespace std;
 class Tokenizer{
 private:
     DFA* dfa;
-    int currTokenIndx;
-    vector<string> tokens;
+    ifstream inFile;
+    bool ended;
+    queue<char> inQueue;
 
 public:
     Tokenizer(DFA* dfa, string inputPath);
-    void tokenize (string filepath);
+    string tokenize();
     string getNextToken();
 };

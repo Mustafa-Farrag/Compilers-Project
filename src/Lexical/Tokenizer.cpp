@@ -3,60 +3,62 @@
 
 Tokenizer:: Tokenizer (DFA* dfa, string inputPath){
     this->dfa = dfa;
-    this->currTokenIndx = 0;
-    tokenize(inputPath);
+    ended = false;
+    inFile = ifstream(inputPath);
 }
 
-void Tokenizer::tokenize(string inputPath) {
-    ifstream inputFile(inputPath);
+string Tokenizer::tokenize() {
     
-    if (!inputFile.is_open()) {
-        cerr << "Unable to open file!" << endl;
-        return;
+    if (!inFile.is_open()) {
+        return "$";
     }
 
-    char character;
-    string inputString = "";
+    char c;
+    
+    while (true) {
+        if(ended) {
+            inFile.close();
+            return "$";
+        }
 
-    while (inputFile.get(character)){
-        inputString += character;
-    }
+        if(inQueue.empty()){
+            inFile.get(c);
+        }else{
+            c = inQueue.front();
+            inQueue.pop();
+        }
 
-    inputFile.close();
-
-    for (int i = 0; i < inputString.length(); i++){
         DFAState* start = dfa->getStartState();
         DFAState* currentState = start;
         
         string acceptanceType = "";
-        int acceptanceIndex = -1;
-        int startIdx = i;
         
-        if(inputString[i]==' ' || inputString[i]=='\n') continue;
+        if(c==' ' || c=='\n') continue;
 
-        currentState = currentState->getNextState(string(1, inputString[i]));
-        while(!currentState->getIsPhi() && i<inputString.length()){
+        currentState = currentState->getNextState(string(1, c));
+        inQueue.push(c);
+        while(!currentState->getIsPhi() && !ended){
             if(currentState->getIsAccepting()){
                 acceptanceType = currentState->getClassType();
-                acceptanceIndex = i;
+                while(!inQueue.empty()){
+                    inQueue.pop();
+                }
             }
 
-            i++;
-            currentState = currentState->getNextState(string(1, inputString[i]));
+            ended = !inFile.get(c);
+            inQueue.push(c);
+            currentState = currentState->getNextState(string(1, c));
         }
 
-        if(acceptanceIndex == -1){
-            cerr << "unrecognized token: " << string(1, inputString[startIdx]) << endl;
-            i = startIdx;
+        if(acceptanceType == ""){
+            cerr << "unrecognized token: " << c << endl;
             continue;
         }
 
-        tokens.push_back(acceptanceType);
-        i = acceptanceIndex;
+        return acceptanceType;
     }
 }
 
- string Tokenizer::getNextToken(){
-    if(currTokenIndx >= tokens.size()) return "$";
-    return tokens[currTokenIndx++];
+string Tokenizer::getNextToken(){
+    return tokenize();
 }

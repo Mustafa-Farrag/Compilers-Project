@@ -32,17 +32,21 @@ void Tracer::trace(){
 
     string currtoken = tokenizer->getNextToken();
     while(!stack.empty()){
+        if(currtoken == "$"){
+            cout << "";
+        }
         CFGElement* element = stack.top();
         stack.pop();
         if(element->getIsTerminal()){
             if(element->getName() == "\\L"){
+                printStack(stack, outputFile);
                 continue;
             }
             if(element->getName() == currtoken){
                 cout << "Matched token " << element->getName() << "\n";
             }
             else{
-                cout << "Error: missing " << currtoken << ", inserted \n";
+                cout << "Error: missing " << element->getName() << ", inserted \n";
             }
             printStack(stack, outputFile);
             currtoken = tokenizer->getNextToken();
