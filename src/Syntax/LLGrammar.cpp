@@ -61,8 +61,6 @@ void LLGrammar::eliminateLR(string nonTerminal){
     
     productions[name] = inOldRule;
     productions[newName] = inNewRule;
-    
-    cout<<"KK";
 }
 
 void LLGrammar:: replaceProduction(string a1, string a2){
@@ -211,5 +209,32 @@ void LLGrammar::parse(string inputFilePath){
     this->productions = productions;
     LeftFactoring();
     removeLeftRecursion();
-    cout << "here";
+}
+
+void LLGrammar:: writeToFile(string file){
+    ofstream outputFile(file);  
+
+    if (outputFile.is_open()) {
+        // Write content to the file
+        for (const auto& pair : productions) {
+            string line = pair.first + " ::= ";
+            for(int i=0;i<pair.second.size();i++){
+                for(const auto& p : pair.second[i]){
+                    line += p;
+                    line += " ";
+                }
+                if(i != pair.second.size() - 1)
+                    line += " | ";
+            }
+            outputFile << line;
+            outputFile << "\n";
+        }
+
+        // Close the file
+        outputFile.close();
+    } else {
+        cout << "Unable to open LLGrammar file.\n";
+    }
+
+    
 }

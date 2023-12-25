@@ -1,0 +1,17 @@
+METHOD_BODY ::= STATEMENT_LIST 
+ASSIGNMENT ::= 'id' '=' EXPRESSION ';' 
+DECLARATION ::= PRIMITIVE_TYPE 'id' ';' 
+EXPRESSION ::= SIMPLE_EXPRESSION EXPRESSION' 
+EXPRESSION' ::= \L  | 'relop' SIMPLE_EXPRESSION 
+FACTOR ::= '(' EXPRESSION ')'  | 'id'  | 'num' 
+IF ::= 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' 
+PRIMITIVE_TYPE ::= 'float'  | 'int' 
+SIGN ::= addop 
+SIMPLE_EXPRESSION ::= addop TERM SIMPLE_EXPRESSION'  | TERM SIMPLE_EXPRESSION' 
+SIMPLE_EXPRESSION' ::= 'addop' TERM SIMPLE_EXPRESSION'  | \L 
+STATEMENT ::= 'id' '=' EXPRESSION ';'  | 'float' 'id' ';'  | 'int' 'id' ';'  | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}'  | WHILE 
+STATEMENT_LIST ::= 'id' '=' EXPRESSION ';' STATEMENT_LIST'  | 'float' 'id' ';' STATEMENT_LIST'  | 'int' 'id' ';' STATEMENT_LIST'  | 'if' '(' EXPRESSION ')' '{' STATEMENT '}' 'else' '{' STATEMENT '}' STATEMENT_LIST'  | WHILE STATEMENT_LIST' 
+STATEMENT_LIST' ::= STATEMENT STATEMENT_LIST'  | \L 
+TERM ::= '(' EXPRESSION ')' TERM'  | 'id' TERM'  | 'num' TERM' 
+TERM' ::= 'mulop' FACTOR TERM'  | \L 
+WHILE ::= 'while' '(' EXPRESSION ')' '{' STATEMENT '}' 

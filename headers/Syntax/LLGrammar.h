@@ -2,6 +2,7 @@
 // #include "CFGInputParser.h"
 #include <bits/stdc++.h>
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -18,4 +19,5 @@ public:
     LLGrammar();
 
     void parse(string filePath);
+    void writeToFile(string filePath);
 };

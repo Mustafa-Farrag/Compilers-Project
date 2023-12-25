@@ -23,7 +23,7 @@ void Tracer::trace(){
     stack.push(new CFGElement("$", true));
     stack.push(start);
 
-    printStack(stack);
+    // printStack(stack);
 
     string currtoken = tokenizer->getNextToken();
     while(!stack.empty()){
@@ -39,7 +39,7 @@ void Tracer::trace(){
             else{
                 cout << "Error: missing " << currtoken << ", inserted \n";
             }
-            printStack(stack);
+            // printStack(stack);
             currtoken = tokenizer->getNextToken();
             continue;
         }
@@ -53,13 +53,13 @@ void Tracer::trace(){
 
         }else if(production[0] == "sync"){
             cout << "sync\n";
-            printStack(stack);
+            // printStack(stack);
             continue;
         }else{
             for (auto it = production.rbegin(); it != production.rend(); ++it) {
                 stack.push(elements[*it]);
             }
-            printStack(stack);
+            // printStack(stack);
         }
     }
     if(stack.empty()){
