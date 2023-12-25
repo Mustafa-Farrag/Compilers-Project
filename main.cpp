@@ -37,6 +37,9 @@ int main(){
 
     cout << "minimized DFA transition Table size: " << minimizeDFA->getMinimizedTable().size()<< "\n";
 
+    // Tokenization -> used in Tracing
+    Tokenizer* tokenizer = new Tokenizer(dfa, "Files/syntax_test.txt");
+
     // parse cfg rules
     CFGInputParser cfgParser("Files/cfg_rules.txt");
     map<string, CFGElement*> elements = cfgParser.getCFGElements();
@@ -45,7 +48,14 @@ int main(){
     map<CFGElement*, set<string>> firstSet = cfgffe->getFirstSet();
     map<CFGElement*, set<string>> followSet = cfgffe->getFollowSet();
 
+    //parser table test
+    CFGParserHandler parserHandler(cfgffe);
+    map<string, map<string, vector<string>>> parserTable = parserHandler.getParserTable();
+
     cout << "Hi";
-    
+
+    Tracer* tracer = new Tracer(start, parserTable, elements, tokenizer);
+    tracer->trace();
+
     return 0;
 }
