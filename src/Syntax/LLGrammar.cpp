@@ -190,6 +190,10 @@ void LLGrammar::parse(string inputFilePath){
             vector<string> proElements = splitBySpaces(prods);
 
             if(name != ""){
+                if(isStart){
+                    start = name;
+                    isStart = false;
+                }
                pushbackToProductions(name, proElements, productions);
             }
             
@@ -216,7 +220,23 @@ void LLGrammar:: writeToFile(string file){
 
     if (outputFile.is_open()) {
         // Write content to the file
+        vector<vector<string>> p = productions[start];
+        string line = start + " ::= ";
+        for(int i=0;i<p.size();i++){
+            for(const auto& p : p[i]){
+                line += p;
+                line += " ";
+            }
+            if(i != p.size() - 1)
+                line += " | ";
+        }
+        outputFile << line;
+        outputFile << "\n";
+
         for (const auto& pair : productions) {
+            if(pair.first == start){
+                continue;
+            }
             string line = pair.first + " ::= ";
             for(int i=0;i<pair.second.size();i++){
                 for(const auto& p : pair.second[i]){

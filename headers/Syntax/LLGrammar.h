@@ -8,7 +8,7 @@ using namespace std;
 
 class LLGrammar{
 private:
-
+    string start;
     map<string, vector<vector<string>>> productions;
     void removeLeftRecursion();
     void eliminateLR(string nonTerminal);
