@@ -8,14 +8,23 @@ Tracer::Tracer(CFGElement* start, map<string, map<string, vector<string>>> parse
     this->tokenizer = tokenizer;
 }
 
+void printStack(stack<CFGElement*> s) {
+    while (!s.empty()) {
+        cout << s.top()->getName() << " ";
+        s.pop();
+    }
+    cout << "\n";
+}
+
 
 void Tracer::trace(){
     stack<CFGElement*> stack;
 
-
     stack.push(new CFGElement("$", true));
     stack.push(start);
-    
+
+    printStack(stack);
+
     string currtoken = tokenizer->getNextToken();
     while(!stack.empty()){
         CFGElement* element = stack.top();
@@ -30,6 +39,7 @@ void Tracer::trace(){
             else{
                 cout << "Error: missing " << currtoken << ", inserted \n";
             }
+            printStack(stack);
             currtoken = tokenizer->getNextToken();
             continue;
         }
@@ -43,13 +53,13 @@ void Tracer::trace(){
 
         }else if(production[0] == "sync"){
             cout << "sync\n";
-            // ???????????
+            printStack(stack);
             continue;
         }else{
             for (auto it = production.rbegin(); it != production.rend(); ++it) {
-                // cout << *it << "\n";
                 stack.push(elements[*it]);
             }
+            printStack(stack);
         }
     }
     if(stack.empty()){
