@@ -56,7 +56,7 @@ void LLGrammar::eliminateLR(string nonTerminal){
         v.push_back(newName);
     }
     vector<string> ep = {"\\L"};
-    
+
     inNewRule.push_back(ep);
     
     productions[name] = inOldRule;
@@ -104,6 +104,52 @@ void LLGrammar::removeLeftRecursion(){
             replaceProduction(keys[i], keys[j]);
         }
         eliminateLR(keys[i]);
+    }
+}
+
+void LLGrammar::LeftFactoring(){
+     vector<string> keys;
+
+    // Extract keys from the map
+    for (const auto& pair : productions) {
+        keys.push_back(pair.first);
+    }
+
+    for(int i=0;i<keys.size();i++){
+        map<string, vector<vector<string>>> v;
+
+        vector<vector<string>> k = productions[keys[i]];
+        for(int j=0;j< k.size();j++){
+            v[k[j][0]].push_back(k[j]);
+        }
+
+        
+        vector<vector<string>> oldRules;
+        string name = keys[i];
+
+        for (const auto& pair : v) {
+            if(pair.second.size() > 1){
+                string newName = name + "'";
+
+                vector<string> oldProd = {pair.first,  newName};
+                oldRules.push_back(oldProd);
+
+                vector<vector<string>> newRules;
+
+                for(int j=0;j<pair.second.size();j++){
+                    vector<string> t = pair.second[j];
+                    t.erase(t.begin());
+                    if(t.size() == 0){
+                        t.push_back("\\L");
+                    }
+                    newRules.push_back(t);
+                }
+                productions[newName] = newRules;
+            }else{
+                oldRules.push_back(pair.second[0]);
+            }
+        }
+        productions[name] = oldRules;
     }
 }
 
@@ -163,6 +209,7 @@ void LLGrammar::parse(string inputFilePath){
     vector<string> proElements = splitBySpaces(prods);
     pushbackToProductions(name, proElements, productions);
     this->productions = productions;
+    LeftFactoring();
     removeLeftRecursion();
     cout << "here";
 }

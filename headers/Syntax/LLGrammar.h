@@ -12,7 +12,8 @@ private:
     void removeLeftRecursion();
     void eliminateLR(string nonTerminal);
     void replaceProduction(string a1, string a2);
-
+    void LeftFactoring();
+    
 public:
     LLGrammar();
 
