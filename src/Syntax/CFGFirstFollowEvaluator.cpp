@@ -127,3 +127,7 @@ map<CFGElement*, set<string>> CFGFirstFollowEvaluator::getFollowSet(){
     return followSet;
 }
 
+map<string, CFGElement*> CFGFirstFollowEvaluator::getElements(){
+    return elements;
+}
+

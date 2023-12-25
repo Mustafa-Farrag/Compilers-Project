@@ -20,4 +20,5 @@ public:
     CFGFirstFollowEvaluator(CFGElement* start, map<string, CFGElement*> elements);
     map<CFGElement*, set<string>> getFirstSet();
     map<CFGElement*, set<string>> getFollowSet();
+    map<string, CFGElement*> getElements();
 };

@@ -44,6 +44,10 @@ int main(){
     CFGInputParser cfgParser("Files/cfg_rules.txt");
     map<string, CFGElement*> elements = cfgParser.getCFGElements();
     CFGElement* start = cfgParser.getStartSymbol();
+    CFGFirstFollowEvaluator* cfgffe = new CFGFirstFollowEvaluator(start, elements);
+    map<CFGElement*, set<string>> firstSet = cfgffe->getFirstSet();
+    map<CFGElement*, set<string>> followSet = cfgffe->getFollowSet();
+
     cout << "Hi";
     
     return 0;
