@@ -40,9 +40,9 @@ int main(){
     // Tokenization -> used in Tracing
     Tokenizer* tokenizer = new Tokenizer(dfa, "Files/syntax_test.txt");
 
-    // LLGrammar* llgrammar = new LLGrammar();
-    // llgrammar->parse("Files/original_grammar.txt");
-    // llgrammar->writeToFile("Files/LLgrammar.txt");
+    LLGrammar* llgrammar = new LLGrammar();
+    llgrammar->parse("Files/original_grammar.txt");
+    llgrammar->writeToFile("Files/LLgrammar.txt");
 
     // parse cfg rules
     CFGInputParser cfgParser("Files/LLgrammar.txt");
