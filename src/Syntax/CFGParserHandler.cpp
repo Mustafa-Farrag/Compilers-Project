@@ -16,6 +16,31 @@ void CFGParserHandler::constructParseTable(){
     map<CFGElement*, set<string>> firstSets = FFEvaluator->getFirstSet();
     map<CFGElement*, set<string>> followSets = FFEvaluator->getFollowSet();
 
+    cout << "----------- First Sets -----------" << endl;
+
+    for(auto entry: firstSets){
+        cout << entry.first->getName() << ": ";
+        cout << "[ ";
+        for(auto f: entry.second){
+            cout << f << ' ';
+        }
+        cout << "]" << endl;
+    }
+
+    cout << endl;
+    cout << "----------- Follow Sets -----------" << endl;
+
+    for(auto entry: followSets){
+        cout << entry.first->getName() << ": ";
+        cout << "[ ";
+        for(auto f: entry.second){
+            cout << f << " ";
+        }
+        cout << "]" << endl;
+    }
+
+    cout << endl;
+
     map<string, CFGElement*> elements = FFEvaluator->getElements();
 
     vector<string> cols;

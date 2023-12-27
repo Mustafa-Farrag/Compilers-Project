@@ -21,6 +21,7 @@ void printStack(stack<CFGElement*> s, ofstream& outputFile ) {
 
 
 void Tracer::trace(){
+    cout << "----------- Parsing Actions -----------" << endl;
     ofstream outputFile("Files/Tracer Productions.txt");  
 
     stack<CFGElement*> stack;
