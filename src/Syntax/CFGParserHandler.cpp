@@ -3,8 +3,9 @@
 #include "Syntax/CFGParserHandler.h"
 #include "Syntax/CFGFirstFollowEvaluator.h"
 
-CFGParserHandler::CFGParserHandler(CFGFirstFollowEvaluator* _FFEvaluator){
+CFGParserHandler::CFGParserHandler(CFGFirstFollowEvaluator* _FFEvaluator, map<string, CFGElement*> cfgElements){
     FFEvaluator = _FFEvaluator;
+    this->cfgElements = cfgElements;
     constructParseTable();
 }
 
@@ -145,4 +146,55 @@ vector<string> CFGParserHandler::getSuitableTransition(string row, string col,
     }
 
     return trans;
+}
+
+
+void CFGParserHandler::outputParserTable(string outputfilePath) {
+
+    ofstream outputFile(outputfilePath);
+
+    if (!outputFile.is_open()) 
+        std::cerr << "Error opening the file!" << std::endl;
+
+    outputFile << left << setw(110) << setfill(' ') << "Non-Temrinal \\ Terminal";
+
+    vector<string> cols;
+
+    for (auto element : cfgElements){
+        if (element.second->getIsTerminal()){
+             if (element.second->getName() == "\\L") continue;
+             outputFile << left << setw(110) << setfill(' ') << element.second->getName();
+             cols.push_back(element.second->getName());
+        }
+           
+    }
+
+    outputFile << endl;
+
+    for (auto element : cfgElements){
+        if (!element.second->getIsTerminal()){
+            if (element.second->getName() == "ASSIGNMENT") cout << "Fuck";
+            outputFile << left << setw(110) << setfill(' ') << element.second->getName();
+            map<string, vector<string>> elements = parserTable[element.second->getName()];
+            for (auto col : cols){
+                vector<string> rule = elements[col];
+                string ruleString = "";
+                for (auto ele : rule)
+                    ruleString = ruleString + " -> " + ele;
+                if (ruleString != " -> " && ruleString != " -> sync")
+                    outputFile << left << setw(110) << setfill(' ') << ruleString;
+                else if (ruleString == " -> ")
+                    outputFile << left << setw(110) << setfill(' ') << "Error";
+                else
+                     outputFile << left << setw(110) << setfill(' ') << "Sync";
+            }
+        }
+
+        else continue;
+           
+        outputFile << endl;
+    }
+
+    outputFile.close();
+
 }
